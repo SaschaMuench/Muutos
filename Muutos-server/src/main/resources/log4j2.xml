@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+
+<Configuration package="de.sonnmatt.muutos.server" status="trace">
+	<appenders>
+		<JDBC name="databaseAppender" tableName="logging">
+			<ConnectionFactory class="de.sonnmatt.muutos.ConnectionFactory" method="getDatabaseConnection" />
+			<Column name="EVENT_DATE" isEventTimestamp="true" />
+			<Column name="LEVEL" pattern="%level" />
+			<Column name="LOGGER" pattern="%logger" />
+			<Column name="MSG" pattern="%message" />
+			<Column name="THROWABLE" pattern="%ex{full}" />
+		</JDBC>
+		<JDBC name="databaseClientLog" tableName="clientLogging">
+			<ConnectionFactory class="de.sonnmatt.muutos.ConnectionFactory" method="getDatabaseConnection" />
+			<Column name="EventDate" pattern="%X{client.datetime}" />
+			<Column name="SessionID" pattern="%X{client.sessionid}" />
+			<Column name="ClassName" pattern="%X{client.sourceclassname}" />
+			<Column name="MethodName" pattern="%X{client.sourcemethodname}" />
+			<Column name="Level" pattern="%level" />
+			<Column name="Logger" pattern="%X{client.loggername}" />
+			<Column name="Msg" pattern="%message" />
+			<Column name="Throwable" pattern="%ex{full}" />
+		</JDBC>
+		<!-- File Appender -->
+		<File name="File" fileName="c:/temp/muutos.log">
+			<PatternLayout pattern="%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} - %msg%n" />
+		</File>
+
+		<!-- <Jdbc name="DBLogs" tableName="Muutos_Logs"> <ConnectionFactory class="de.sonnmatt.muutos.ConnectionFactory" method="getDatabaseConnection" /> <Column 
+			name="SessionID" pattern="%.50X{sessionID}" /> <Column name="UserID" pattern="%.20X{userID}" /> <Column name="StampDate" isEventTimestamp="true" /> <Column 
+			name="Logger" pattern="%.50logger" /> <Column name="LogLevel" pattern="%.10level" /> <Column name="Class" pattern="%.50class{1}" /> <Column name="Method" 
+			pattern="%.50M" /> <Column name="Line" pattern="%line" /> <Column name="Message" pattern="%.1000message" /> </Jdbc> <Jdbc name="DBUserLogin" tableName="Muutos_UserLogins"> 
+			<ConnectionFactory class="de.sonnmatt.muutos.ConnectionFactory" method="getDatabaseConnection" /> <Column name="SessionID" pattern="%.50X{sessionID}" /> 
+			<Column name="UserID" pattern="%.20X{userID}" /> <Column name="StampDate" isEventTimestamp="true" /> <Column name="Message" pattern="%.1000message" /> 
+			</Jdbc> -->
+	</appenders>
+
+	<Loggers>
+		<Root level="trace">
+			<!-- <AppenderRef ref="DBLogs" /> -->
+			<AppenderRef ref="databaseAppender" />
+		</Root>
+
+		<logger name="clientLog" additivity="false">
+			<AppenderRef ref="databaseClientLog" />
+		</logger>
+
+		<logger name="com.journaldev" additivity="false">
+			<AppenderRef ref="File" />
+			<AppenderRef ref="databaseAppender" />
+		</logger>
+
+		<Logger name="org.hibernate.type" level="trace" additivity="false">
+			<AppenderRef ref="databaseAppender" />
+		</Logger>
+
+		<Logger name="org.hibernate" level="trace" />
+		<Logger name="org.hibernate.SQL" level="trace" />
+		<Logger name="org.hibernate.tool.hbm2ddl" level="debug" />
+
+		<!-- <Logger name="UserLogin" additivity="TRUE" level="ALL"> <AppenderRef ref="DBUserLogin" level="ALL" /> </Logger> -->
+	</Loggers>
+</Configuration>

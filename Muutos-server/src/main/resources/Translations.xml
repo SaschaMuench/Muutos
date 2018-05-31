@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Translations>
+	<Package name="Login" language="DE">
+		<Text name=".view.windowTitle">Muutos - Login</Text>
+		<Text name=".view.loginPageTitle">Muutos - Login</Text>
+		<Text name=".view.loginTitle">Muutos - Login</Text>
+		<Text name=".view.loginLabel">Benutzer</Text>
+		<Text name=".view.loginPlaceholder">Benutzer Kürzel</Text>
+		<Text name=".view.loginHelp"> </Text>
+		<Text name=".view.passwordLabel">Passwort</Text>
+		<Text name=".view.passwordPlaceholder">Passwort</Text>
+		<Text name=".view.loginBtn">Einloggen</Text>
+		<Text name=".view.forgetPassword">Passwort vergessen?</Text>
+		<Text name=".view.footerLine">Bitte wenden Sie sich an Ihre Administrator, falls Sie keine Zugangsdaten haben. Bei vergessenem Passwort nutzen Sie bitte "Passwort vergessen?"</Text>
+		<Text name=".view.communicationError">communicationError: %s</Text>
+		<Text name=".view.userNameNeeded">Bitte Benutzer ausfüllen</Text>
+		<Text name=".view.loginHelpFailed"> </Text>
+		<Text name=".view.passwordHelpFailed"> </Text>
+		<Text name=".view.passwordHelp"> </Text>
+	</Package>
+	<Package name="Login" language="EN">
+		<Text name=".view.windowTitle">Muutos - Login</Text>
+		<Text name=".view.loginPageTitle">Muutos - Login</Text>
+		<Text name=".view.loginTitle">Muutos - Login</Text>
+		<Text name=".view.loginLabel">User</Text>
+		<Text name=".view.loginPlaceholder">user name</Text>
+		<Text name=".view.loginHelp"> </Text>
+		<Text name=".view.passwordLabel">Password</Text>
+		<Text name=".view.passwordPlaceholder">password</Text>
+		<Text name=".view.loginBtn">login</Text>
+		<Text name=".view.forgetPassword">Forget password?</Text>
+		<Text name=".view.footerLine">Bitte wenden Sie sich an Ihre Administrator, falls Sie keine Zugangsdaten haben. Bei vergessenem Passwort nutzen Sie bitte "Passwort vergessen?"</Text>
+		<Text name=".view.communicationError">communicationError: %s</Text>
+		<Text name=".view.userNameNeeded">Please fill in user name</Text>
+		<Text name=".view.loginHelpFailed"> </Text>
+		<Text name=".view.passwordHelpFailed"> </Text>
+		<Text name=".view.passwordHelp"> </Text>
+	</Package>
+	<Package name="Logoff" language="DE">
+		<Text name=".view.windowTitle">Muutos - Logoff</Text>
+		<Text name=".view.logoffPageTitle">Muutos - Abgemeldet</Text>
+		<Text name=".view.logoffBodyTitle">Sie wurden erfolgreich abgemeldet!</Text>
+		<Text name=".view.logoffBodyText">Schliessen Sie das Browser Fenster oder melden Sie sich erneut an.</Text>
+		<Text name=".view.closeBtn">Schliessen</Text>
+		<Text name=".view.loginBtn">Einloggen</Text>
+		<Text name=".view.footerLine"> </Text>
+	</Package>
+	<Package name="Logoff" language="EN">
+		<Text name=".view.windowTitle">Muutos - Logoff</Text>
+		<Text name=".view.logoffPageTitle">Muutos - logged off</Text>
+		<Text name=".view.logoffBodyTitle">Successfully logged off!</Text>
+		<Text name=".view.logoffBodyText">Close your browser window or log in again.</Text>
+		<Text name=".view.closeBtn">Close</Text>
+		<Text name=".view.loginBtn">Log in</Text>
+		<Text name=".view.footerLine"> </Text>
+	</Package>
+	<Package name="Timeout" language="DE">
+		<Text name=".view.windowTitle">Muutos - Timeout</Text>
+		<Text name=".view.logoffPageTitle">Muutos - Abgemeldet</Text>
+		<Text name=".view.logoffBodyTitle">Sie wurden aufgrund Inaktivität erfolgreich abgemeldet!</Text>
+		<Text name=".view.logoffBodyText">Schliessen Sie das Browser Fenster oder melden Sie sich erneut an.</Text>
+		<Text name=".view.closeBtn">Schliessen</Text>
+		<Text name=".view.loginBtn">Einloggen</Text>
+		<Text name=".view.footerLine"> </Text>
+	</Package>
+	<Package name="Timeout" language="EN">
+		<Text name=".view.windowTitle">Muutos - Timeout</Text>
+		<Text name=".view.logoffPageTitle">Muutos - logged off</Text>
+		<Text name=".view.logoffBodyTitle">Successfully logged off due to inactivity!</Text>
+		<Text name=".view.logoffBodyText">Close your browser window or log in again.</Text>
+		<Text name=".view.closeBtn">Close</Text>
+		<Text name=".view.loginBtn">Log in</Text>
+		<Text name=".view.footerLine"> </Text>
+	</Package>
+	<Package name="AppBase" language="DE">
+		<Text name=".view.windowTitle">Muutos - Hauptseite</Text>
+		<Text name=".view.Brand">Muutos</Text>
+		<Text name=".view.CopyrightFooter">(c) 2016 - {YEAR(NOW())} by S. Münch</Text>
+		<Text name=".view.Menu1">Unklare Belege</Text>
+		<Text name=".view.Menu1Sub1">Offene Rückfragen</Text>
+		<Text name=".view.Menu1Sub2">Beantwortete Rückfragen</Text>
+		<Text name=".view.Menu1Sub3">Verarbeitete Rückfragen</Text>
+		<Text name=".view.Menu1Sub4">Alle Rückfragen</Text>
+		<Text name=".view.Menu1Sub5">Terminierte Rückfragen</Text>
+		<Text name=".view.Menu2">Statistik</Text>
+		<Text name=".view.Menu2Sub1">Beleganzahlen</Text>
+		<Text name=".view.Menu2Sub2">Auswertung Rückfragen</Text>
+		<Text name=".view.Menu2Sub3">Auswertung Rücksendungen</Text>
+		<Text name=".view.Menu2Sub4"></Text>
+		<Text name=".view.Menu2Sub5"></Text>
+		<Text name=".view.Menu3">Management</Text>
+		<Text name=".view.Menu3Sub1">Ausnahmen</Text>
+		<Text name=".view.Menu3Sub2">Rücksendebriefe</Text>
+		<Text name=".view.Menu3Sub3"></Text>
+		<Text name=".view.Menu3Sub4"></Text>
+		<Text name=".view.Menu3Sub5"></Text>
+	</Package>
+	<Package name="AppBase" language="EN">
+		<Text name=".view.windowTitle">Muutos - mainpage</Text>
+		<Text name=".view.Brand">Muutos</Text>
+		<Text name=".view.CopyrightFooter">(c) 2016 - {YEAR(NOW())} by S. Münch</Text>
+		<Text name=".view.Menu1">Unclear documents</Text>
+		<Text name=".view.Menu1Sub1">Open questions</Text>
+		<Text name=".view.Menu1Sub2">Answered queries</Text>
+		<Text name=".view.Menu1Sub3">Procesed queries</Text>
+		<Text name=".view.Menu1Sub4">All questions</Text>
+		<Text name=".view.Menu1Sub5"></Text>
+		<Text name=".view.Menu2">Statistics</Text>
+		<Text name=".view.Menu2Sub1">Number documents</Text>
+		<Text name=".view.Menu2Sub2">Auswertung Rückfragen</Text>
+		<Text name=".view.Menu2Sub3">Auswertung Rücksendungen</Text>
+		<Text name=".view.Menu2Sub4"></Text>
+		<Text name=".view.Menu2Sub5"></Text>
+		<Text name=".view.Menu3">Management</Text>
+		<Text name=".view.Menu3Sub1">Exceptions</Text>
+		<Text name=".view.Menu3Sub2">Return letters</Text>
+		<Text name=".view.Menu3Sub3"></Text>
+		<Text name=".view.Menu3Sub4"></Text>
+		<Text name=".view.Menu3Sub5"></Text>
+	</Package>
+	
+</Translations>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Setup>
+	<Tenants>
+		<Tenant>
+			<Code>DSM</Code>
+			<Name>Muutos Server</Name>
+			<UrlPart>muutos</UrlPart>
+			<Type>Server</Type>
+			<IsActive>True</IsActive>
+			<IsTest>False</IsTest>
+			<Layer>0</Layer>
+			<Parent></Parent>
+		</Tenant>
+		<Tenant>
+			<Code>TDSG</Code>
+			<Name>TDS Group</Name>
+			<UrlPart>tdsg</UrlPart>
+			<Type>Group</Type>
+			<IsActive>True</IsActive>
+			<IsTest>False</IsTest>
+			<Layer>1</Layer>
+			<Parent>DSM</Parent>
+		</Tenant>
+		<Tenant>
+			<Code>TDSCH</Code>
+			<Name>TDSCH</Name>
+			<UrlPart>tds</UrlPart>
+			<Type>Tenant</Type>
+			<IsActive>True</IsActive>
+			<IsTest>False</IsTest>
+			<Layer>2</Layer>
+			<Parent>TDSG</Parent>
+		</Tenant>
+	</Tenants>
+	<Languages>
+		<Language>
+			<Code>DE</Code>
+			<Description>Deutsch</Description>
+		</Language>
+		<Language>
+			<Code>EN</Code> 
+			<Description>English</Description>
+		</Language>
+	</Languages>
+	<User>
+		<Tenant>DSM</Tenant>
+		<LoginName>smu</LoginName>
+		<Password>smu</Password>
+		<IsActive>True</IsActive>
+		<PwdMustChange>False</PwdMustChange>
+		<LanCode>EN</LanCode>
+		<Company></Company>
+		<FirstName>Sascha</FirstName>
+		<LastName>Münch</LastName>
+		<Street></Street>
+		<ZIP></ZIP>
+		<City></City>
+		<Country></Country>
+		<eMail>muenchs@gmx.net</eMail>
+		<Phone></Phone>
+		<Mobile></Mobile>
+	</User>
+
+	<Text name=""></Text>
+	<Text name=""></Text>
+	<Text name=""></Text>
+	<Text name=""></Text>
+	<Text name=""></Text>
+	<Text name=""></Text>
+	<Text name=""></Text>
+	<Text name=""></Text>
+	<Text name=""></Text>
+	<Text name=""></Text>
+	<Text name="Layer">0</Text>
+</Setup>

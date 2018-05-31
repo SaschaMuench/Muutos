@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+         
+	<persistence-unit name="muutos" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<non-jta-data-source>java:comp/env/jdbc/MuutosDB</non-jta-data-source>
+
+		<class>de.sonnmatt.muutos.jpa.TranslationJPA</class>
+		<class>de.sonnmatt.muutos.jpa.UserJPA</class>
+		<class>de.sonnmatt.muutos.jpa.GroupJPA</class>
+		<class>de.sonnmatt.muutos.jpa.TenantJPA</class>
+		<class>de.sonnmatt.muutos.jpa.CompanyJPA</class>
+		<class>de.sonnmatt.muutos.jpa.LanguageJPA</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
+			<property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="true" />
+		</properties>
+	</persistence-unit>
+
+</persistence>
