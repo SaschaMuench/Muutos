@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:b="urn:import:org.gwtbootstrap3.client.ui">
+
+	<ui:with field="myRen" type="de.sonnmatt.muutos.views.resources.LogoffViewResources">
+		<ui:attributes data="de.sonnmatt.muutos.DTOs.TranslationsDTO" internal="transDTO" returnValue="String" namePrefix="Logoff.view" />
+	</ui:with>
+	
+	<g:HTMLPanel>
+		<!-- TextBox to generate the translations -->
+		<b:TextBox text="{myRen.windowTitle}" visible="false" />
+		<!-- Container to be shown -->
+		<b:Container ui:field="logoffContainer" pixelSize="600,200" marginTop="100">
+			<b:Panel>
+				<b:PanelHeader >
+					<b:PageHeader text="{myRen.logoffPageTitle}" styleName="centerText" />
+				</b:PanelHeader>
+				<b:PanelBody> 
+					<b:Form>
+						<b:FieldSet>
+							<b:Heading ui:field="logoffTitle" size="H4" text="{myRen.logoffBodyTitle}" />
+							<b:FormLabel ui:field="logoffMessage" text="{myRen.logoffBodyText}" />
+						</b:FieldSet>
+						<b:FieldSet>
+							<b:Container fluid="true">
+								<b:Row>
+									<b:Column size="MD_6">
+										<b:Button block="true" ui:field="loginBtn" type="PRIMARY" text="{myRen.loginBtn}" tabIndex="1" focus="true"  />
+									</b:Column>
+									<b:Column size="MD_6">
+										<b:Button block="true" ui:field="closeBtn" type="PRIMARY" text="{myRen.closeBtn}" tabIndex="2"  />
+									</b:Column>
+								</b:Row>
+							</b:Container>
+						</b:FieldSet>
+					</b:Form>
+				</b:PanelBody>
+
+				<b:PanelFooter>
+					<g:Label ui:field="footerLine" text="{myRen.footerLine}" horizontalAlignment="center" />
+				</b:PanelFooter>
+			</b:Panel>
+		</b:Container>
+	</g:HTMLPanel>
+</ui:UiBinder>

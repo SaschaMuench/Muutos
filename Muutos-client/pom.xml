@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>de.sonnmatt.muutos</groupId>
+		<artifactId>Muutos</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>Muutos-client</artifactId>
+	<packaging>gwt-app</packaging>
+
+	<prerequisites>
+		<maven>${mavenVersion}</maven>
+	</prerequisites>
+
+	<properties>
+		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>de.sonnmatt.annotations</groupId>
+			<artifactId>UiBinderResourceProcessor</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/../../Annotations/jar/SonnmattProcessor.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>Muutos-shared</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>Muutos-shared</artifactId>
+			<version>${project.version}</version>
+			<classifier>sources</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-dev</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.code.gwt-log/gwt-log -->
+		<dependency>
+			<groupId>com.google.code.gwt-log</groupId>
+			<artifactId>gwt-log</artifactId>
+			<version>2.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.gwtbootstrap3</groupId>
+			<artifactId>gwtbootstrap3</artifactId>
+			<version>${gwtBootstrapVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.gwtbootstrap3</groupId>
+			<artifactId>gwtbootstrap3-extras</artifactId>
+			<version>${gwtBootstrapVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.pepstock</groupId>
+		    <artifactId>charba</artifactId>
+		    <version>1.3</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>net.ltgt.gwt.maven</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<configuration>
+					<moduleName>de.sonnmatt.muutos.Muutos</moduleName>
+					<moduleShortName>muutos</moduleShortName>
+					<compilerArguments>
+						<ASourcepath>${basedir}/../Muutos-client/src/main/java/</ASourcepath>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<proc>process-classes</proc>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<annotationProcessors>
+						<processor>de.sonnmatt.processor.GenerateTranslation</processor>
+					</annotationProcessors>
+					<compilerArguments>
+						<ATranslationSections>de.sonnmatt.muutos.enums.TranslationSections</ATranslationSections>
+						<ASourcepath>${basedir}/../Muutos-client/src/main/java/</ASourcepath>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

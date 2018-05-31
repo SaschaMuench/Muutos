@@ -1,0 +1,22 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+
+# more caches and things from deploy #
+*/war/WEB-INF/deploy/
+*/war/WEB-INF/deploy/*.*
+*/war/WEB-INF/classes/
+*/war/muutos/
+
+#compilation logs
+.gwt/
+
+#caching for already compiled files
+gwt-unitCache/
+
+# other
+/target/
+/.settings/
+/.classpath

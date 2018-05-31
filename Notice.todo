@@ -1,0 +1,49 @@
+Notice for future use:
+
+	PDF to image:
+		https://pdfbox.apache.org/index.html
+		http://www.docjar.com/html/api/org/apache/pdfbox/PDFToImage.java.html
+		http://blog.rubypdf.com/2008/01/30/pdftoimage-convert-pdf-to-image-by-using-pdfrenderer-library/
+		http://www.baeldung.com/pdf-conversions-java 
+
+	Logging 4 GWT:
+				https://gwt.googlesource.com/gwt/+/refs/heads/master/user/super/com/google/gwt/emul/java/util/logging/Logger.java
+
+	Chart.js:
+		https://github.com/pepstock-org/Charba
+
+		'''
+xmlns:c="urn:import:org.pepstock.charba.client"
+
+<g:VerticalPanel width="100%" height="30%" ui:field="container">
+   	 <g:cell width="100%" height="90%" verticalAlignment="middle" horizontalAlignment="center">
+		        <c:DoughnutChart ui:field="chart"/>
+	    </g:cell>
+</g:VerticalPanel>
+
+@UiField DoughnutChart chart;
+
+chart.getOptions().setResponsive(true);
+chart.getOptions().getLegend().setPosition(Position.top);
+chart.getOptions().getTitle().setDisplay(true);
+chart.getOptions().getTitle().setText("Charba Doughnut Chart");
+
+DoughnutDataset dataset = chart.newDataset();
+dataset.setLabel("dataset 1");
+dataset.setBackgroundColor("red", "blue");
+dataset.setData(0.3, 0.7);
+dataset.setLabel("Label");
+
+chart.getData().setLabels("Roter Bereich", "Blauer Bereich");
+//chart.getData().setLabels("", "");
+//chart.getOptions().getLegend().setDisplay(false);
+chart.getData().setDatasets(dataset);
+			'''
+
+	Clean data tables for system setup:
+		TRUNCATE TABLE Muutos_Translations;
+		TRUNCATE TABLE Muutos_Languages;
+		TRUNCATE TABLE Muutos_UserGroups;
+		DELETE FROM Muutos_Users;
+		UPDATE Muutos_Tenants SET ParentId = NULL;
+		DELETE FROM Muutos_Tenants;

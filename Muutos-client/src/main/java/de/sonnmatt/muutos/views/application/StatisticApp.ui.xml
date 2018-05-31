@@ -1,0 +1,37 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:c="urn:import:org.pepstock.charba.client">
+
+	<ui:style>
+	.important {
+		font-weight: bold;
+	}
+	</ui:style>
+
+	<g:HTMLPanel>
+		<g:HorizontalPanel width="80%" height="100%" spacing="10">
+			<g:cell width="33%" height="100%" verticalAlignment="middle" horizontalAlignment="center">
+				<c:DoughnutChart ui:field="chart" />
+			</g:cell>
+			<g:cell width="33%" height="100%" verticalAlignment="middle" horizontalAlignment="center">
+				<c:GaugeChart ui:field="chartPercent" />
+			</g:cell>
+			<g:cell width="33%" height="100%" verticalAlignment="middle" horizontalAlignment="center">
+				<c:GaugeChart ui:field="chartValue" />
+			</g:cell>
+		</g:HorizontalPanel>
+			
+		
+		1<br /><br />
+		2<br /><br />
+		3<br /><br />
+		4<br /><br />
+		5<br /><br />
+		6<br /><br />
+		7<br /><br />
+		8<br /><br />
+		9<br /><br />
+		10<br /><br />
+	</g:HTMLPanel>
+</ui:UiBinder> 

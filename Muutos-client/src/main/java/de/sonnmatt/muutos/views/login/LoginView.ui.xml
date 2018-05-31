@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <!DOCTYPE ui:UiBinder SYSTEM "https://dl-ssl.google.com/download/gwt/DTD/xhtml.ent"> -->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:b="urn:import:org.gwtbootstrap3.client.ui">
+
+	<ui:with field="myRen" type="de.sonnmatt.muutos.views.resources.LoginViewResources">
+		<ui:attributes data="de.sonnmatt.muutos.DTOs.TranslationsDTO" internal="transDTO" returnValue="String" namePrefix="login.view" />
+	</ui:with>
+	<!--  sections="de.sonnmatt.muutos.enums.TranslationSections" section="login.view" -->
+	
+	<g:HTMLPanel>
+		<!-- TextBox to generate the translations -->
+		<b:TextBox text="{myRen.windowTitle}" visible="false" />
+		<b:TextBox text="{myRen.loginHelpFailed}" visible="false" /> 
+		<b:TextBox text="{myRen.passwordHelpFailed}" visible="false" />
+
+		<!-- Container to be shown -->
+		<b:Container ui:field="loginContainer" pixelSize="600,200" marginTop="100">
+			<b:Panel>
+				<b:PanelHeader >
+					<b:PageHeader text="{myRen.loginPageTitle}" styleName="centerText" />
+				</b:PanelHeader>
+				<b:PanelBody>
+					<b:Form>
+						<b:FieldSet>
+							<b:Legend text="{myRen.loginTitle}" />
+							<b:FormGroup ui:field="groupLogin">
+								<b:FormLabel ui:field="loginLabel" for="formLogin" text="{myRen.loginLabel}" />
+								<b:TextBox ui:field="loginTextbox" b:id="formLogin" placeholder="{myRen.loginPlaceholder}" focus="true"
+									tabIndex="1" maxLength="50" />
+								<b:HelpBlock ui:field="loginHelp" text="{myRen.loginHelp}" />
+							</b:FormGroup>
+
+							<b:FormGroup ui:field="groupPassword">
+								<b:FormLabel ui:field="passwordLabel" for="formPassword" text="{myRen.passwordLabel}" />
+								<b:Input ui:field="passwordInput" type="PASSWORD" b:id="formPassword" placeholder="{myRen.passwordPlaceholder}"
+									tabIndex="2" maxLength="50" />
+								<b:HelpBlock ui:field="passwordHelp" text="{myRen.passwordHelp}" />
+							</b:FormGroup>
+
+							<b:Button ui:field="loginBtn" block="true" type="PRIMARY" text="{myRen.loginBtn}" tabIndex="3"  />
+							<b:Anchor ui:field="forgetPassword" text="{myRen.forgetPassword}" />
+						</b:FieldSet>
+					</b:Form>
+				</b:PanelBody>
+
+				<b:PanelFooter>
+					<g:Label ui:field="footerLine" text="{myRen.footerLine}" horizontalAlignment="center" />
+				</b:PanelFooter>
+			</b:Panel>
+		</b:Container>
+	</g:HTMLPanel>
+</ui:UiBinder>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>loginServlet</servlet-name>
+		<servlet-class>de.sonnmatt.muutos.LoginServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>loginServlet</servlet-name>
+		<url-pattern>/muutos/loginservice</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>de.sonnmatt.muutos.AppServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/muutos/appservice</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>greetServlet</servlet-name>
+		<servlet-class>de.sonnmatt.muutos.GreetingServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>greetServlet</servlet-name>
+		<url-pattern>/muutos/greet</url-pattern>
+	</servlet-mapping>
+
+	<!-- Logging -->
+	<servlet>
+		<servlet-name>remoteLogging</servlet-name>
+		<!-- <servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class> -->
+		<servlet-class>de.sonnmatt.muutos.SimpleRemoteLogging</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>remoteLogging</servlet-name>
+		<url-pattern>/muutos/remote_logging</url-pattern>
+	</servlet-mapping>
+  
+	<!-- Security settings -->
+	<!-- <filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>muutos.jsp</welcome-file>
+		<!-- <welcome-file>index.html</welcome-file> -->
+	</welcome-file-list>
+
+	<resource-ref>
+		<description>Database connection for the application</description>
+		<res-ref-name>jdbc/MuutosDB</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+</web-app>
