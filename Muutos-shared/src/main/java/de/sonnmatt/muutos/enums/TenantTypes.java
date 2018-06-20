@@ -7,7 +7,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public enum TenantTypes implements Serializable, IsSerializable {
 	Server,
 	Group,
-	Tenant;
+	Tenant,
+	Company;
 	
 	@Override
 	public String toString() {

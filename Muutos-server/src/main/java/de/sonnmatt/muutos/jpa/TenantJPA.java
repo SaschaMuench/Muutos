@@ -1,17 +1,16 @@
 package de.sonnmatt.muutos.jpa;
 
-import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EntityManager;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -22,7 +21,8 @@ import de.sonnmatt.muutos.utils.StringListConverter;
 
 @Entity
 @Table(name = "Muutos_Tenants")
-public class TenantJPA {
+@EntityListeners( { HierarchyListener.class } )
+public class TenantJPA implements IHierarchyElement {
 
 	@Id
 	@GeneratedValue(generator = "UUID")
@@ -37,22 +37,22 @@ public class TenantJPA {
 	private String urlPart;
 	@Column(name = "Type", updatable = true, nullable = false, unique = false)
 	private TenantTypes type;
-	@Column(name = "Active", updatable = true, nullable = false, unique = false)
+	@Column(name = "isActive", updatable = true, nullable = false, unique = false)
 	private Boolean isActive = true;
-	@Column(name = "IsTest", updatable = true, nullable = false, unique = false)
+	@Column(name = "isTest", updatable = true, nullable = false, unique = false)
 	private Boolean isTest = false;
-	@Column(name = "Layer", updatable = true, nullable = false, unique = false)
-	private int layer = 0;
-	@ManyToOne(cascade={CascadeType.ALL})
+	@Column(name = "Level", updatable = true, nullable = false, unique = false)
+	private int level = 0;
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="ParentId")
 	private TenantJPA parent = null;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="TopTenant")
+	private TenantJPA topTenant = null;
 	@Column(name = "Structure", updatable = true, nullable = false, unique = false, length = 250)
 	@Convert(converter = StringListConverter.class)
 	private List<String> structure = null;
 	
-	@OneToMany(cascade = CascadeType.REFRESH)
-	private List<CompanyJPA> companies;
-
 	public TenantJPA() {
 	}
 	public TenantJPA(String code, String name, String urlPart, Boolean active, Boolean test) {
@@ -99,28 +99,17 @@ public class TenantJPA {
 	public void setIsTest(Boolean isTest) {
 		this.isTest = isTest;
 	}
-	public List<CompanyJPA> getCompanies() {
-		return companies;
+	public int getLevel() {
+		return level;
 	}
-	public void setCompanies(List<CompanyJPA> companies) {
-		this.companies = companies;
-	}
-	public int getLayer() {
-		return layer;
-	}
-	public void setLayer(int layer) {
-		this.layer = layer;
+	public void setLevel(int level) {
+		this.level = level;
 	}
 	public TenantJPA getParent() {
 		return parent;
 	}
 	public void setParent(TenantJPA parent) {
 		this.parent = parent;
-		if (parent == null) {
-			this.structure = null;
-		} else {
-			this.structure = parent.getParentStructure();
-		}
 	}
 	public void setParent(String parentCode) {
 		if (parentCode == null || parentCode.isEmpty()) {
@@ -148,27 +137,23 @@ public class TenantJPA {
 		return ((new StringListConverter()).convertToDatabaseColumn(this.structure));
 	}
 	public List<String> getStructure() {
-		List<String> struct = this.structure;
-		if (struct == null) {
-			struct = new ArrayList<>();
-		}
-		if (struct.contains(this.id)) {
-			struct.remove(this.id);
-		}
-		return struct;
+		return this.structure;
 	}
 	public List<String> getParentStructure() {
 		List<String> struct = this.structure;
-		if (struct == null) {
-			struct = new ArrayList<>();
-		}
-		struct.add(this.id);
+		struct.remove(this.id);
 		return struct;
 	}
 	public void setStructure(List<String> structure) {
-		if (structure.contains(this.id)) {
-			structure.remove(this.id);
-		}
 		this.structure = structure;
+	}
+	public IHierarchyElement getTop() {
+		return topTenant;
+	}
+	public void setTop(IHierarchyElement top) {
+		this.topTenant = (TenantJPA) top;
+	}
+	public Boolean isTop() {
+		return (type == TenantTypes.Tenant);
 	}
 }
