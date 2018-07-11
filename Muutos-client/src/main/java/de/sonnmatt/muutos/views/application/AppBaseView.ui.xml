@@ -5,7 +5,7 @@
 	xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html">
 	
 	<ui:with field="appRen" type="de.sonnmatt.muutos.views.resources.AppBaseViewResources">
-		<ui:attributes data="de.sonnmatt.muutos.DTOs.TranslationsDTO" internal="transDTO" returnValue="String" namePrefix="appbase.view" />
+		<ui:attributes data="de.sonnmatt.muutos.DTOs.TextResourcesDTO" internal="textxDTO" returnValue="String" namePrefix="appbase.view" />
 	</ui:with>
 	<ui:with field="myVis" type="de.sonnmatt.muutos.views.resources.AppBaseViewVisibles">
 		<ui:attributes data="de.sonnmatt.muutos.DTOs.ViewDTO" internal="viewDTO" returnValue="Boolean" namePrefix="appbase.view" />

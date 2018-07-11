@@ -7,6 +7,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+
 /**
  * 
  * @author MuenSasc
@@ -49,4 +50,5 @@ public class ConnectionFactory {
 	public static Connection getDatabaseConnection() throws SQLException {
 		return Singleton.INSTANCE.dataSource.getConnection();
 	}
+	
 }

@@ -1,5 +1,7 @@
 package de.sonnmatt.muutos.views.application;
 
+import static de.sonnmatt.muutos.enums.TextSections.*;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,14 +11,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
-import de.sonnmatt.muutos.enums.TranslationSections;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 
 public class AppBasePresenter implements IAppBasePresenter {
 
 	private IAppBaseView	view;
 	private HandlerManager	eventBus;
-	private TranslationsDTO	transDTO;
+	private TextResourcesDTO	transDTO;
 
 	private Logger log = Logger.getLogger("Muutos");
 	private static final String className = "AppBasePresenter";
@@ -29,7 +30,7 @@ public class AppBasePresenter implements IAppBasePresenter {
 		this.view = view;
 	}
 
-	public AppBasePresenter(final IAppBaseView view, HandlerManager eventBus, TranslationsDTO transDTO) {
+	public AppBasePresenter(final IAppBaseView view, HandlerManager eventBus, TextResourcesDTO transDTO) {
 		log.log(Level.FINER, className + ".AppBasePresenter() : ENTRY");
 		this.eventBus = eventBus;
 		this.view = view;
@@ -54,7 +55,7 @@ public class AppBasePresenter implements IAppBasePresenter {
 		log.log(Level.FINER, className + ".go() : ENTRY");
 		container.clear();
 		container.add(view.asWidget());
-		Window.setTitle(transDTO.get(TranslationSections.AppBase + ".view.windowTitle"));
+		Window.setTitle(transDTO.get(APP_BASE + ".view.windowTitle"));
 		view.show();
 		log.log(Level.FINER, className + ".go() : EXIT");
 	}
@@ -62,7 +63,7 @@ public class AppBasePresenter implements IAppBasePresenter {
 	@Override
 	public void showViewPort(final Widget viewPort) {
 		log.log(Level.FINER, className + ".showViewPort() : ENTRY");
-		Window.setTitle(transDTO.get(TranslationSections.AppBase + ".view.windowTitle"));
+		Window.setTitle(transDTO.get(APP_BASE + ".view.windowTitle"));
 		view.setAppViewPort(viewPort);
 		log.log(Level.FINER, className + ".showViewPort() : EXIT");
 	}

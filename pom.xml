@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -15,11 +16,11 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<mavenVersion>3.0</mavenVersion>
-		<gwtVersion>2.8.1</gwtVersion>
+		<mavenVersion>3.5.3</mavenVersion>
+		<gwtVersion>2.8.2</gwtVersion>
 		<gwtBootstrapVersion>0.9.4</gwtBootstrapVersion>
-		<hibernateVersion>5.2.11.Final</hibernateVersion>
-		<log4jVersion>2.9.0</log4jVersion>
+		<hibernateVersion>5.2.6.Final</hibernateVersion>
+		<log4jVersion>2.11.0</log4jVersion>
 		<springSecurityVersion>4.2.3.RELEASE</springSecurityVersion>
 	</properties>
 
@@ -32,10 +33,12 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
-				<version>3.1.0</version>
+				<version>4.0.1</version>
+				<scope>provided</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -50,20 +53,21 @@
 					<launcherDir>${project.build.directory}/gwt/launcherDir</launcherDir>
 				</configuration>
 			</plugin>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.5</version>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-						<failOnMissingWebXml>false</failOnMissingWebXml>
-					</configuration>
-					<executions>
-						<execution>
-							<phase>process-classes</phase>
-						</execution>
-					</executions>
-				</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>process-classes</phase>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -77,17 +81,9 @@
 						<failOnError>true</failOnError>
 					</configuration>
 				</plugin>
-<!-- 				<plugin> -->
-<!-- 					<groupId>org.eclipse.jetty</groupId> -->
-<!-- 					<artifactId>jetty-maven-plugin</artifactId> -->
-<!-- 					<version>9.2.15.v20160210</version> -->
-<!-- 					<configuration> -->
-<!-- 						<skip>true</skip> -->
-<!-- 					</configuration> -->
-<!-- 				</plugin> -->
 				<plugin>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.0.1</version>
 					<executions>
 						<execution>
 							<id>attach-sources</id>
@@ -98,34 +94,24 @@
 						</execution>
 					</executions>
 				</plugin>
-<!-- 				<plugin> -->
-<!-- 					<groupId>org.apache.tomcat.maven</groupId> -->
-<!-- 					<artifactId>tomcat6-maven-plugin</artifactId> -->
-<!-- 					<version>2.2</version> -->
-<!-- 				</plugin> -->
+				<!-- https://mvnrepository.com/artifact/org.apache.tomcat.maven/tomcat8-maven-plugin -->
 				<plugin>
 					<groupId>org.apache.tomcat.maven</groupId>
-					<artifactId>tomcat7-maven-plugin</artifactId>
-					<version>2.2</version>
+					<artifactId>tomcat8-maven-plugin</artifactId>
+					<version>3.0-r1756463</version>
 				</plugin>
-				<!-- https://mvnrepository.com/artifact/org.apache.tomcat.maven/tomcat8-maven-plugin -->
-<!-- 				<plugin> -->
-<!-- 				    <groupId>org.apache.tomcat.maven</groupId> -->
-<!-- 				    <artifactId>tomcat8-maven-plugin</artifactId> -->
-<!-- 				    <version>3.0-r1756463</version> -->
-<!-- 				</plugin> -->
-		   		<plugin>
-	              <groupId>org.owasp</groupId>
-	              <artifactId>dependency-check-maven</artifactId>
-	              <version>3.0.2</version>
-	              <executions>
-	                  <execution>
-	                      <goals>
-	                          <goal>check</goal>
-	                      </goals>
-	                  </execution>
-	              </executions>
-	            </plugin>
+				<plugin>
+					<groupId>org.owasp</groupId>
+					<artifactId>dependency-check-maven</artifactId>
+					<version>3.0.2</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>

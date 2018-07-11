@@ -7,7 +7,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.DTOs.UserDTO;
 import de.sonnmatt.muutos.exceptions.LoginException;
 
@@ -30,7 +30,7 @@ public interface ClientLogging extends RemoteService {
 		}
 	}
 	
-	public TranslationsDTO getText(String language);
+	public TextResourcesDTO getText(String language);
 
 	public Boolean queryResetPassword(String username);
 	

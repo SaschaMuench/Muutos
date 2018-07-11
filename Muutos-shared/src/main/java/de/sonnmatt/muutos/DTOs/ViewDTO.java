@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-import de.sonnmatt.muutos.enums.TranslationSections;
-
 public class ViewDTO implements Serializable, IsSerializable {
 
 	private static final long serialVersionUID = 158110508718377779L;

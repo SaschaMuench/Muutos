@@ -1,5 +1,7 @@
 package de.sonnmatt.muutos.views.login;
 
+import static de.sonnmatt.muutos.enums.TextSections.*;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,10 +17,9 @@ import com.google.gwt.user.client.ui.HasWidgets;
 
 import de.sonnmatt.muutos.AppLocalData;
 import de.sonnmatt.muutos.URLHandler;
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.DTOs.UserDTO;
 import de.sonnmatt.muutos.enums.Tokens;
-import de.sonnmatt.muutos.enums.TranslationSections;
 import de.sonnmatt.muutos.enums.UserFields;
 import de.sonnmatt.muutos.events.BusyEvent;
 import de.sonnmatt.muutos.events.BusyEvent.BusyEvents;
@@ -26,13 +27,13 @@ import de.sonnmatt.muutos.rpc.LoginService;
 
 public class LoginPresenter implements ILoginPresenter {
 
-	private ILoginView		view;
-	private HandlerManager	eventBus;
-	private TranslationsDTO	transDTO;
+	private ILoginView view;
+	private HandlerManager eventBus;
+	private TextResourcesDTO texts;
 
 	private Logger logger = Logger.getLogger("Muutos");
 	private static final String className = "LoginPresenter.";
-	
+
 	public ILoginView getLoginView() {
 		return view;
 	}
@@ -41,11 +42,11 @@ public class LoginPresenter implements ILoginPresenter {
 		this.view = view;
 	}
 
-	public LoginPresenter(final ILoginView view, HandlerManager eventBus, TranslationsDTO transDTO) {
+	public LoginPresenter(final ILoginView view, HandlerManager eventBus, TextResourcesDTO result) {
 		logger.log(Level.FINER, className + "LoginPresenter() : ENTRY");
 		this.eventBus = eventBus;
 		this.view = view;
-		this.transDTO = transDTO;
+		this.texts = result;
 		view.setPresenter(this);
 		logger.log(Level.FINER, className + "LoginPresenter() : EXIT");
 	}
@@ -65,19 +66,20 @@ public class LoginPresenter implements ILoginPresenter {
 		String username = view.getLoginTextbox();
 		String password = view.getPasswordInput();
 		if (username.isEmpty() || username.equals(null) || username.length() < 3) {
-			//user name not in valid range
-			view.popupMessage(transDTO.get(TranslationSections.Login + ".view.userNameNeeded"), NotifyType.WARNING);
-			view.setLoginHelp(transDTO.get(TranslationSections.Login + ".view.userNameNeeded"));
+			// user name not in valid range
+			view.popupMessage(texts.get(LOGIN + ".view.userNameNeeded"), NotifyType.WARNING);
+			view.setLoginHelp(texts.get(LOGIN + ".view.userNameNeeded"));
 			view.setLoginValidationState(ValidationState.ERROR);
 		}
 		if (password.isEmpty() || password.equals(null) || password.length() < 3) {
-			//password not in valid range
-			view.popupMessage(transDTO.get(TranslationSections.Login + ".view.passwordNeeded"), NotifyType.WARNING);
-			view.setPasswordHelp(transDTO.get(TranslationSections.Login + ".view.passwordNeeded"));
+			// password not in valid range
+			view.popupMessage(texts.get(LOGIN + ".view.passwordNeeded"), NotifyType.WARNING);
+			view.setPasswordHelp(texts.get(LOGIN + ".view.passwordNeeded"));
 			view.setPasswordValidationState(ValidationState.ERROR);
 		}
-		if (!(username.isEmpty() || username.equals(null) || username.length() < 3) && !(password.isEmpty() || password.equals(null) || password.length() < 3)) {
-			//Try to validate user
+		if (!(username.isEmpty() || username.equals(null) || username.length() < 3)
+				&& !(password.isEmpty() || password.equals(null) || password.length() < 3)) {
+			// Try to validate user
 			eventBus.fireEvent(new BusyEvent(BusyEvents.start));
 			logger.log(Level.FINER, className + "onClickOk() : call loginUser");
 			LoginService.Util.getInstance().loginUser(username, password, new AsyncCallback<UserDTO>() {
@@ -86,7 +88,9 @@ public class LoginPresenter implements ILoginPresenter {
 				public void onFailure(Throwable caught) {
 					logger.log(Level.SEVERE, className + "onClickLogin() : onFailure", new Throwable(caught));
 					eventBus.fireEvent(new BusyEvent(BusyEvents.end));
-					view.popupMessage(transDTO.get(TranslationSections.Login + ".view.communicationError", caught.getMessage()), NotifyType.DANGER);
+					view.popupMessage(
+							texts.get(LOGIN + ".view.communicationError", caught.getMessage()),
+							NotifyType.DANGER);
 				}
 
 				@Override
@@ -94,16 +98,20 @@ public class LoginPresenter implements ILoginPresenter {
 					if (result.get(UserFields.SessionID) != null) {
 						AppLocalData.storeSessionID(result.get(UserFields.SessionID));
 						AppLocalData.setUserDTO(result);
-						logger.log(Level.FINER, className + "onClickOk() : onSuccess SessionID: " + result.get(UserFields.SessionID));
-						logger.log(Level.FINER, className + "onClickOk() : onSuccess ReadSessionID: " + AppLocalData.readCookieSessionID());
-						logger.log(Level.FINER, className + "onClickOk() : onSuccess GetSessionID: " + AppLocalData.getSessionID());
+						logger.log(Level.FINER,
+								className + "onClickOk() : onSuccess SessionID: " + result.get(UserFields.SessionID));
+						logger.log(Level.FINER, className + "onClickOk() : onSuccess ReadSessionID: "
+								+ AppLocalData.readCookieSessionID());
+						logger.log(Level.FINER,
+								className + "onClickOk() : onSuccess GetSessionID: " + AppLocalData.getSessionID());
 						URLHandler urlHandler = new URLHandler(Window.Location.getHash());
 						urlHandler.setUrlToken(Tokens.APP);
 						History.newItem(urlHandler.getUrl());
 					} else {
-						view.popupMessage(transDTO.get(TranslationSections.Login + ".view.userOrPasswordWrong"), NotifyType.WARNING);
+						view.popupMessage(texts.get(LOGIN + ".view.userOrPasswordWrong"),
+								NotifyType.WARNING);
 						eventBus.fireEvent(new BusyEvent(BusyEvents.end));
-						view.setPasswordHelp(transDTO.get(TranslationSections.Login + ".view.userOrPasswordWrong"));
+						view.setPasswordHelp(texts.get(LOGIN + ".view.userOrPasswordWrong"));
 						view.setPasswordValidationState(ValidationState.ERROR);
 					}
 				}
@@ -116,8 +124,8 @@ public class LoginPresenter implements ILoginPresenter {
 		logger.log(Level.FINER, className + "onClickForgetPassword() : ENTRY");
 		String username = view.getLoginTextbox();
 		if (username.isEmpty() || username.equals(null) || username.length() < 3) {
-			view.popupMessage(transDTO.get(TranslationSections.Login + ".view.userNameNeeded"), NotifyType.WARNING);
-			view.setLoginHelp(transDTO.get(TranslationSections.Login + ".view.userNameNeeded"));
+			view.popupMessage(texts.get(LOGIN + ".view.userNameNeeded"), NotifyType.WARNING);
+			view.setLoginHelp(texts.get(LOGIN + ".view.userNameNeeded"));
 			view.setLoginValidationState(ValidationState.ERROR);
 		} else {
 			eventBus.fireEvent(new BusyEvent(BusyEvents.start));
@@ -127,7 +135,8 @@ public class LoginPresenter implements ILoginPresenter {
 				public void onFailure(Throwable caught) {
 					logger.log(Level.SEVERE, className + "onClickForgetPassword() : onFailure", new Throwable(caught));
 					eventBus.fireEvent(new BusyEvent(BusyEvents.end));
-					view.popupMessage(transDTO.get(TranslationSections.Login + ".view.communicationError", caught.getMessage()),
+					view.popupMessage(
+							texts.get(LOGIN + ".view.communicationError", caught.getMessage()),
 							NotifyType.DANGER);
 				}
 
@@ -135,7 +144,8 @@ public class LoginPresenter implements ILoginPresenter {
 				public void onSuccess(Boolean result) {
 					logger.log(Level.FINER, className + "onClickForgetPassword() : onSuccess");
 					eventBus.fireEvent(new BusyEvent(BusyEvents.end));
-					view.popupMessage(transDTO.get(TranslationSections.Login + ".view.PasswordRequested"), NotifyType.INFO);
+					view.popupMessage(texts.get(LOGIN + ".view.PasswordRequested"),
+							NotifyType.INFO);
 				}
 			});
 		}
@@ -146,7 +156,7 @@ public class LoginPresenter implements ILoginPresenter {
 	public void go(final HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
-		Window.setTitle(transDTO.get(TranslationSections.Login + ".view.windowTitle"));
+		Window.setTitle(texts.get(LOGIN + ".view.windowTitle"));
 		view.show();
 	}
 

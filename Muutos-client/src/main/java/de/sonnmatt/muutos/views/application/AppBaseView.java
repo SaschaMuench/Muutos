@@ -1,14 +1,10 @@
 package de.sonnmatt.muutos.views.application;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.gwtbootstrap3.client.ui.AnchorListItem;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Container;
-import org.gwtbootstrap3.client.ui.DropDownHeader;
 import org.gwtbootstrap3.client.ui.Navbar;
 import org.gwtbootstrap3.client.ui.NavbarBrand;
 import org.gwtbootstrap3.client.ui.Tooltip;
@@ -18,7 +14,7 @@ import org.gwtbootstrap3.extras.bootbox.client.callback.ConfirmCallback;
 import org.gwtbootstrap3.extras.notify.client.constants.NotifyType;
 
 import de.sonnmatt.muutos.URLHandler;
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.DTOs.UserDTO;
 import de.sonnmatt.muutos.DTOs.ViewDTO;
 import de.sonnmatt.muutos.enums.Params;
@@ -26,7 +22,6 @@ import de.sonnmatt.muutos.enums.Tokens;
 import de.sonnmatt.muutos.interfaces.IPresenter;
 import de.sonnmatt.muutos.views.resources.AppBaseViewResources;
 import de.sonnmatt.muutos.views.resources.AppBaseViewVisibles;
-import de.sonnmatt.muutos.views.login.ILoginPresenter;
 //import de.sonnmatt.muutos.client.LoginSwitcher;
 //import de.sonnmatt.muutos.client.apps.UserMgtPopup;
 //import de.sonnmatt.muutos.client.cellTable.ColumnDefinition;
@@ -45,14 +40,10 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 @GenerateTranslation("AppBaseView.ui.xml")
@@ -91,7 +82,7 @@ public class AppBaseView extends Composite implements IAppBaseView {
 	
 	private UserDTO localUser;
 	
-	public AppBaseView(TranslationsDTO translation, ViewDTO viewDTO, UserDTO userDTO) {
+	public AppBaseView(TextResourcesDTO translation, ViewDTO viewDTO, UserDTO userDTO) {
 		//transDto = translation;
 		appRen = new AppBaseViewResources(translation);
 		myVis = new AppBaseViewVisibles(viewDTO);
@@ -255,13 +246,13 @@ public class AppBaseView extends Composite implements IAppBaseView {
 	}
 
 	@Override
-	public TranslationsDTO getTextValues() {
+	public TextResourcesDTO getTextValues() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setTextValues(TranslationsDTO transDTO) {
+	public void setTextValues(TextResourcesDTO transDTO) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,5 +1,7 @@
 package de.sonnmatt.muutos.views.logoff;
 
+import static de.sonnmatt.muutos.enums.TextSections.*;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,9 +11,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 import de.sonnmatt.muutos.URLHandler;
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.enums.Tokens;
-import de.sonnmatt.muutos.enums.TranslationSections;
 import de.sonnmatt.muutos.events.BusyEvent;
 import de.sonnmatt.muutos.events.BusyEvent.BusyEvents;
 
@@ -19,7 +20,7 @@ public class LogoffPresenter implements ILogoffPresenter {
 
 	private ILogoffView		view;
 	private HandlerManager	eventBus;
-	private TranslationsDTO	transDTO;
+	private TextResourcesDTO	transDTO;
 
 	private Logger log = Logger.getLogger("Muutos");
 
@@ -31,7 +32,7 @@ public class LogoffPresenter implements ILogoffPresenter {
 		this.view = view;
 	}
 
-	public LogoffPresenter(final ILogoffView view, HandlerManager eventBus, TranslationsDTO transDTO) {
+	public LogoffPresenter(final ILogoffView view, HandlerManager eventBus, TextResourcesDTO transDTO) {
 		this.eventBus = eventBus;
 		this.view = view;
 		this.transDTO = transDTO;
@@ -63,7 +64,7 @@ public class LogoffPresenter implements ILogoffPresenter {
 	public void go(final HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
-		Window.setTitle(transDTO.get(TranslationSections.Logoff + ".view.windowTitle"));
+		Window.setTitle(transDTO.get(LOGOFF + ".view.windowTitle"));
 		view.show();
 	}
 

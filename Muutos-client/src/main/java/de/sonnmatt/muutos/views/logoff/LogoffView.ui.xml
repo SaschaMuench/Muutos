@@ -4,7 +4,7 @@
 	xmlns:b="urn:import:org.gwtbootstrap3.client.ui">
 
 	<ui:with field="myRen" type="de.sonnmatt.muutos.views.resources.LogoffViewResources">
-		<ui:attributes data="de.sonnmatt.muutos.DTOs.TranslationsDTO" internal="transDTO" returnValue="String" namePrefix="Logoff.view" />
+		<ui:attributes data="de.sonnmatt.muutos.DTOs.TextResourcesDTO" internal="textsDTO" returnValue="String" namePrefix="Logoff.view" />
 	</ui:with>
 	
 	<g:HTMLPanel>

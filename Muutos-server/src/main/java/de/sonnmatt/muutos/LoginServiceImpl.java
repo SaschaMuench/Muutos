@@ -4,6 +4,7 @@
 package de.sonnmatt.muutos;
 
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,25 +12,30 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.DTOs.UserDTO;
-import de.sonnmatt.muutos.enums.TranslationSections;
 import de.sonnmatt.muutos.enums.UserFields;
+import de.sonnmatt.muutos.exceptions.GeneralException;
+import de.sonnmatt.muutos.exceptions.GeneralException.GeneralExceptionType;
 import de.sonnmatt.muutos.exceptions.LoginException;
 import de.sonnmatt.muutos.exceptions.LoginException.LoginExceptionType;
-import de.sonnmatt.muutos.jpa.LanguageJPA;
-import de.sonnmatt.muutos.jpa.TranslationJPA;
+import de.sonnmatt.muutos.jpa.TenantJPA;
 import de.sonnmatt.muutos.jpa.UserJPA;
 import de.sonnmatt.muutos.rpc.LoginService;
+import static de.sonnmatt.muutos.SessionAttributes.*;
 
 /**
  * @author MuenSasc
  *
  */
-public class LoginServiceImpl extends RemoteServiceServlet implements LoginService, IsSerializable {
+public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
+
+	private static final long serialVersionUID = -8424967452520912846L;
+	private static Logger log = LogManager.getLogger(LoginServiceImpl.class);
+	private static EntityManager entityManager = HibernateUtil.getEntityManager();
+	private HttpSession userSession = null;
 
 	public LoginServiceImpl() {
 		super();
@@ -39,121 +45,95 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		super(delegate);
 	}
 
-	private static final long serialVersionUID = -1602894349360490809L;
-	
-	private static Logger log = LogManager.getLogger(LoginServiceImpl.class);
-	private static EntityManager entityManager = HibernateUtil.getEntityManager();
-
 	@Override
-	public TranslationsDTO getText(String language, TranslationSections action) throws LoginException {
-		log.traceEntry("getText({}, {})", language, action.toString());
+	public TextResourcesDTO getText(String tenantUrl, String language, String action) throws LoginException {
+		log.traceEntry("getText({}, {}, {})", tenantUrl, language, action);
+
+		SystemManagement sysMgnmt = SystemManagement.getInstance();
+
+		List<TenantJPA> tenantJPA = entityManager	.createNamedQuery(TenantJPA.GetTenantByUrl, TenantJPA.class)
+													.setParameter(TenantJPA.ParamTenantUrl, tenantUrl)
+													.getResultList();
+		String tenantID = tenantJPA.get(0).getId();
+		log.debug("getText(): tenantJPA.size() from Url {} found: {}", tenantUrl, tenantJPA.size());
+		log.debug("getText(): tenantID from Url {} found: {}", tenantUrl, tenantID);
 		
-		if (language.length() > 2) language = language.substring(0, language.indexOf("-")).toUpperCase();
-		language = language.toUpperCase();
-		List<LanguageJPA> languages = entityManager.createQuery("from LanguageJPA where Code = :lan", LanguageJPA.class)
-														.setParameter("lan", language)
-														.getResultList();
-		if (languages.size() == 0) {
-			languages = entityManager.createQuery("from LanguageJPA", LanguageJPA.class).getResultList();
-			if (languages.size() == 0) {
-				InitializeSetup init = new InitializeSetup();
-				init.setupSystem();
-			} else {
-				log.error("{} getText({}, {}): unknown language", this.getClass().getSimpleName(), language, action.toString());
-				throw(new LoginException("Unknown language: " + language, LoginExceptionType.generalError));
+		userSession = this.getThreadLocalRequest().getSession(true);
+		synchronized (userSession) {
+			userSession.setAttribute(SESSATTR_TENANT_ID, tenantID);
+			userSession.setAttribute(SESSATTR_LANGUAGE, language);
+			userSession.setAttribute(SESSATTR_PARAMS, sysMgnmt);
+		}
+
+		TextService textServ = new TextService();
+		try {
+			return textServ.setLanguage(language).setTenantByUrl(tenantUrl).getTexts(action);
+		} catch (GeneralException e) {
+			if (e.getType() == GeneralExceptionType.unknownLanguage) {
+				log.error("getText({}, {}): unknown language", language, action.toString());
+				throw (new LoginException("Unknown language: " + language, LoginExceptionType.generalError));
+			}
+			if (e.getType() == GeneralExceptionType.unknownTenant) {
+				log.error("getText({}, {}): unknown tenant", language, action.toString());
+				throw (new LoginException("Unknown tenant: " + language, LoginExceptionType.generalError));
 			}
 		}
-		
-		List<TranslationJPA> translations;
-		translations = entityManager.createQuery("from TranslationJPA where lanCode = :lan and Code like :action", TranslationJPA.class)
-										.setParameter("lan", language.toUpperCase())
-										.setParameter("action", action.toString() + ".%")
-										.getResultList();
-		
-		log.trace("getText(): translations found: " + translations.size());
-		TranslationsDTO transDTO = new TranslationsDTO();
-		translations.forEach(t -> transDTO.set(t.getCode(), t.getTranslation()));
-		log.trace("getText(): translations copied");
-		
-		return transDTO;
-	}
-
-	@Override
-	public Boolean queryResetPassword(String username) {
-		// TODO Auto-generated method stub
-		return true;
+		return null;
 	}
 
 	@Override
 	public UserDTO loginUser(String username, String password) throws LoginException {
-		// TODO Auto-generated method stub
-		log.traceEntry("{} loginUser({}, pwd)", this.getClass().getSimpleName(), username);
+		log.traceEntry("loginUser({}, pwd)", username);
 
-		//entityManager.getTransaction().begin();
-
-		log.trace("{} loginUser entityManager started", this.getClass().getSimpleName());
-		List<UserJPA> user = entityManager.createQuery("from UserJPA where LoginName = :username", UserJPA.class)
-											.setParameter("username", username)
-											.getResultList();
-		log.trace("{} loginUser List<UserJPA> generated. Size: {}", this.getClass().getSimpleName(), user.size());
-
-		if (user.size() == 0) {
-			// Check first user --> add as Superuser
-			List<UserJPA> allUsers = entityManager.createQuery("from UserJPA", UserJPA.class).getResultList();
-			log.trace("{} loginUser allUser generated. Size: {}", this.getClass().getSimpleName(), allUsers.size());
-			if (allUsers.size() == 0) {
-				saveSuperUser(username, password);
-				log.trace("{} loginUser get users after generation", this.getClass().getSimpleName());
-				user = entityManager.createQuery("from UserJPA where LoginName = :username", UserJPA.class)
-										.setParameter("username", username)
-										.getResultList();
-				log.trace("{} loginUser List<UserJPA> generated. Size: {}", this.getClass().getSimpleName(), user.size());
-			} else
-				throw new LoginException(username, LoginExceptionType.userUnknown);
+		UserService userService = new UserService();
+		HttpSession userSession = this.getThreadLocalRequest().getSession(true);
+		try {
+			String tenantId = (String)userSession.getAttribute(SESSATTR_TENANT_ID);
+			if (userService.setTenantID(tenantId).verifyUser(username, password)) {
+				log.trace("loginUser({}, pwd): verified in with Session ID {}", username, userSession.getId());
+				UserJPA user = userService.getUser(username);
+				UserDTO userDto = user.generateDTO();
+				userDto.set(UserFields.SessionID, userSession.getId());
+				
+				synchronized (userSession) {
+					userSession.setAttribute(SESSATTR_LOGIN, username);
+					userSession.setAttribute(SESSATTR_USER, userDto);
+				};
+				return log.traceExit("loginUser(" + username + ", pwd) succeded: {}", userDto);
+			} else {
+				return log.traceExit("loginUser(" + username + ", pwd) denied: {}", null);
+			}
+		} catch (LoginException e) {
+			log.error("loginUser({}) causes: {}", username, e.getMessage());
+			throw new LoginException(e.getMessage(), e.getType());
 		}
-		if (user.get(0).getActive().equals(false))
-			throw new LoginException(username, LoginExceptionType.loginLocked);
-		if (!user.get(0).checkPassword(password))
-			throw new LoginException("", LoginExceptionType.passwordWrong);
+	}
 
-		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
-        HttpSession session = httpServletRequest.getSession(true);
-        
-		UserDTO userDto = user.get(0).generateDTO();
-		userDto.set(UserFields.SessionID, session.getId());
-		session.setAttribute("user", userDto);
-        
-		return userDto;
+	@Override
+	public UserDTO loginFromSessionServer() {
+		return getUserAlreadyFromSession();
+	}
+
+	private UserDTO getUserAlreadyFromSession() {
+		UserDTO user = null;
+		HttpSession session = this.getThreadLocalRequest().getSession();
+		Object userObj = session.getAttribute("USER");
+		if (userObj != null && userObj instanceof UserDTO) {
+			user = (UserDTO) userObj;
+		}
+		return user;
 	}
 
 	public Boolean logoffUser() {
 		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
-        HttpSession session = httpServletRequest.getSession(true);
-        
-        session.invalidate();
-        return true;
+		HttpSession session = httpServletRequest.getSession(true);
+
+		session.invalidate();
+		return true;
 	}
-	
-	private void saveSuperUser(String username, String password) {
-		log.traceEntry("{} saveSuperUser({}, pwd)", this.getClass().getSimpleName(), username);
-		UserJPA user = new UserJPA();
-		//user.setUid("00000000-0000-0000-0000-000000000000")
-		user.setLoginName(username);
-		user.setPassword(password);
-		user.setPwdMustChange(false);
-		user.setActive(true);
-		user.setLanCode("EN");
-		//user.setCompany("Tessi");
-		//user.setFirstName(" ");
-		//user.setLastName(" ");
-		user.seteMail("muenchs@gmx.net");
-		
-		log.trace("{} saveSuperUser() hashedPwd: {}", this.getClass().getSimpleName(), user.getPassword());
-		
-		EntityManager entityManager = HibernateUtil.getEntityManager();
-		entityManager.getTransaction().begin();
-		entityManager.persist(user);
-		entityManager.flush();
-		entityManager.getTransaction().commit();
+
+	public Boolean queryResetPassword(String username) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

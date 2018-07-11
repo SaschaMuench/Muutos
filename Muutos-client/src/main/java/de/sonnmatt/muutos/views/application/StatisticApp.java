@@ -8,14 +8,10 @@ import org.pepstock.charba.client.GaugeChart;
 import org.pepstock.charba.client.data.DoughnutDataset;
 import org.pepstock.charba.client.data.GaugeDataset;
 import org.pepstock.charba.client.enums.MeterDisplay;
-import org.pepstock.charba.client.enums.Position;
-import org.pepstock.charba.client.utils.Color;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StatisticApp extends Composite /*implements HasText*/ {

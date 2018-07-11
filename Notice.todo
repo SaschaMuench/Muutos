@@ -41,9 +41,11 @@ chart.getData().setDatasets(dataset);
 			'''
 
 	Clean data tables for system setup:
-		TRUNCATE TABLE Muutos_Translations;
-		TRUNCATE TABLE Muutos_Languages;
-		TRUNCATE TABLE Muutos_UserGroups;
-		DELETE FROM Muutos_Users;
-		UPDATE Muutos_Tenants SET ParentId = NULL;
-		DELETE FROM Muutos_Tenants;
+		TRUNCATE TABLE Muutos_SystemParamameters;
+TRUNCATE TABLE Muutos_Texts;
+TRUNCATE TABLE Muutos_Languages;
+TRUNCATE TABLE Muutos_UserGroups;
+DELETE FROM Muutos_Users;
+UPDATE Muutos_Tenants SET ParentId = NULL, TopTenant = NULL;
+DELETE FROM Muutos_Tenants;
+

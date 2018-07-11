@@ -6,7 +6,6 @@ package de.sonnmatt.muutos;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,14 +14,13 @@ import org.apache.logging.log4j.Logger;
  *
  */
 public class HibernateUtil {
-	static Logger log = LogManager.getLogger(HibernateUtil.class);
+	static Logger log = LogManager.getLogger("HibernateUtil.class");
 	static String classname = "HibernateUtil";
 	
 	private static final EntityManagerFactory emFactory;
 	static {
-		log.traceEntry("{}.EntityManagerFactory", classname);
 		emFactory = Persistence.createEntityManagerFactory("muutos");
-		log.entry("{}.EntityManagerFactory: done", classname);
+		log.trace("{}.EntityManagerFactory: done", classname);
 	}
 
 	public static EntityManager getEntityManager() {
@@ -31,11 +29,14 @@ public class HibernateUtil {
 			log.error("{}.getEntityManager(): emFactor is null", classname);
 		}
 		EntityManager entityMan = emFactory.createEntityManager();
-		log.entry("{}.getEntityManager(): entityMan created", classname);
+		log.trace("{}.getEntityManager(): entityMan created", classname);
 		return entityMan;
 	}
 
 	public static void close() {
+		log.trace("{}.close()", classname);
 		emFactory.close();
 	}
+
 }
+

@@ -7,44 +7,47 @@ import java.util.Map.Entry;
 import javax.persistence.EntityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import de.sonnmatt.muutos.enums.TranslationSections;
+
 import de.sonnmatt.muutos.jpa.LanguageJPA;
 import de.sonnmatt.muutos.jpa.TenantJPA;
-import de.sonnmatt.muutos.jpa.TranslationJPA;
+import de.sonnmatt.muutos.jpa.TextJPA;
+import de.sonnmatt.muutos.jpa.TextSectionsExt;
 import de.sonnmatt.muutos.jpa.UserJPA;
+import static de.sonnmatt.muutos.jpa.TenantJPA.*;
 
 public class InitializeSetup {
 	private static Logger log = LogManager.getLogger(InitializeSetup.class);
 	private static String classname = "InitializeSetup";
 	private static EntityManager entityManager = HibernateUtil.getEntityManager();
-	
+
 	private LoadXML4Setup loadSystemXml;
 	private LoadXML4Setup loadTranslationXml;
-	
+
 	public void setupSystem() {
 		log.traceEntry("{} setupSystem()", classname);
-		
+
 		loadSystemXml = new LoadXML4Setup();
 		loadSystemXml.loadXmlFile("SystemSetup.xml");
-		
+
 		loadTranslationXml = new LoadXML4Setup();
 		loadTranslationXml.loadXmlFile("Translations.xml");
-		
+
 		languages();
 		tenant();
 		translations();
 		saveSuperUser();
-		
+
 		log.traceExit("{} setupSystem()", classname);
 	}
-	
+
 	private void tenant() {
 		log.traceEntry("{}.tenant()", classname);
 
 		entityManager.getTransaction().begin();
-		
+
 		HashMap<Integer, HashMap<String, String>> nodeData = new HashMap<>();
 		nodeData = loadSystemXml.getMultiNodeData("/Setup/Tenants/Tenant");
+		log.trace("/Setup/Tenants/Tenant[Count]: {}", nodeData.size());
 		for (int temp = 0; temp < nodeData.size(); temp++) {
 			HashMap<String, String> subNodeData = nodeData.get(temp);
 			log.trace("{}.tenant(): generate tenant: {}", classname, subNodeData.get("Code"));
@@ -55,33 +58,36 @@ public class InitializeSetup {
 			tenant.setType(subNodeData.get("Type"));
 			tenant.setIsActive(Boolean.valueOf(subNodeData.get("IsActive")));
 			tenant.setIsTest(Boolean.valueOf(subNodeData.get("IsTest")));
-			tenant.setLayer(Integer.valueOf(subNodeData.get("Layer")));
+			tenant.setLevel(Integer.valueOf(subNodeData.get("Layer")));
 			TenantJPA parentTenant = null;
 			if (!(subNodeData.get("Parent") == null || subNodeData.get("Parent").isEmpty())) {
-				List<TenantJPA> tenants = entityManager.createQuery("from TenantJPA where Code = :parent order by Layer", TenantJPA.class)
-														.setParameter("parent", subNodeData.get("Parent"))
-														.getResultList();				log.trace("{}.tenant(): get parents({}): {}", classname, subNodeData.get("Code"), tenants.size());
+				List<TenantJPA> tenants = null;
+				tenants = entityManager	.createNamedQuery(GetTenantByCode_OrderLevel, TenantJPA.class)
+										.setParameter(ParamTenantCode, subNodeData.get("Parent"))
+										.getResultList();
+				log.trace("{}.tenant(): get parents({}): {}", classname, subNodeData.get("Code"), tenants.size());
 				if (!tenants.isEmpty()) {
-					parentTenant = tenants.get(0);					
+					parentTenant = tenants.get(0);
 				}
 			}
 			tenant.setParent(parentTenant);
-			entityManager.persist(tenant);	
-		}			
-		
+			entityManager.persist(tenant);
+		}
+
 		entityManager.flush();
 		entityManager.getTransaction().commit();
-		
+
 		log.traceExit("{}.tenant()", classname);
 	}
 
 	private void languages() {
 		log.traceEntry("{}.languages()", classname);
-		
+
 		entityManager.getTransaction().begin();
-		
+
 		HashMap<Integer, HashMap<String, String>> nodeData = new HashMap<>();
 		nodeData = loadSystemXml.getMultiNodeData("/Setup/Languages/Language");
+		log.trace("/Setup/Languages/Language[Count]: {}", nodeData.size());
 		for (int temp = 0; temp < nodeData.size(); temp++) {
 			HashMap<String, String> subNodeData = nodeData.get(temp);
 			log.trace("{}.tenant(): generate language: {}", classname, subNodeData.get("Code"));
@@ -89,49 +95,51 @@ public class InitializeSetup {
 		}
 		entityManager.flush();
 		entityManager.getTransaction().commit();
-		
+
 		log.traceExit("{}.languages()", classname);
 	}
+
 	private void translations() {
 		log.traceEntry("{}.translations()", classname);
-		
+
 		TenantJPA tenant = null;
-		List<TenantJPA> tenants = entityManager.createQuery("from TenantJPA order by Layer", TenantJPA.class)
-				.getResultList();
+		List<TenantJPA> tenants = entityManager.createNamedQuery(GetTenantTop, TenantJPA.class).getResultList();
 		if (!tenants.isEmpty()) {
-			tenant = tenants.get(0);					
+			tenant = tenants.get(0);
 		}
-		List<LanguageJPA> languages = entityManager.createQuery("from LanguageJPA", LanguageJPA.class).getResultList();
+		List<LanguageJPA> languages = entityManager	.createNamedQuery(LanguageJPA.GetLanAll, LanguageJPA.class)
+													.getResultList();
 
 		log.trace("{}.translations(): tenant for tranlations: {}", classname, tenant.getCode());
 		entityManager.getTransaction().begin();
-		for (TranslationSections transAction : TranslationSections.values()) {
+		for (String transAction : TextSectionsExt.values()) {
 			for (LanguageJPA lan : languages) {
-				String xPath = String.format("/Translations/Package[@name='%s' and @language='%s']", transAction.toString(), lan.getCode());
+				String xPath = String.format("/Translations/Package[@name='%s' and @language='%s']", transAction,
+						lan.getCode());
 				log.trace("{}.translations(): xPath: {}", classname, xPath);
 				HashMap<String, String> nodeData = new HashMap<>();
 				nodeData = loadTranslationXml.getNodeAttributeData(xPath, "name");
 				if ((nodeData != null) && (nodeData.size() > 0)) {
 					log.trace("{}.translations(): nodes: {}", classname, nodeData.size());
-					for (Entry<String, String> pair: nodeData.entrySet()) {
-			            log.trace("{}.translations(): generate: {}={}", classname, pair.getKey(), pair.getValue());
-			            entityManager.persist(new TranslationJPA(tenant, transAction.toString() + pair.getKey(), lan.getCode(), pair.getValue()));
-			        }
+					for (Entry<String, String> pair : nodeData.entrySet()) {
+						log.trace("{}.translations(): generate: {}={}", classname, pair.getKey(), pair.getValue());
+						entityManager.persist(
+								new TextJPA(tenant, transAction + pair.getKey(), lan.getCode(), pair.getValue()));
+					}
 				} else {
 					log.trace("{}.translations(): nodes: null or 0", classname);
 				}
 			}
-//			log.trace("{}.translations(): tranlation section: {}", classname, transAction.toString());
-//			insertXml.insertTranslationInDb(transAction.toString(), tenant);
 		}
 		entityManager.flush();
 		entityManager.getTransaction().commit();
-		
+
 		log.traceExit("{}.translations()", classname);
 	}
+
 	private void saveSuperUser() {
 		log.traceEntry("{} saveSuperUser()", classname);
-		
+
 		HashMap<String, String> userData = loadSystemXml.getNodeData("/Setup/User");
 		UserJPA user = new UserJPA();
 		user.setLoginName(userData.get("LoginName"));
@@ -148,17 +156,14 @@ public class InitializeSetup {
 		user.setPhone(userData.get("Phone"));
 		user.setMobile(userData.get("Mobile"));
 		user.seteMail(userData.get("eMail"));
-	
-//		TenantJPA tenant = null;
-//		List<TenantJPA> tenants = entityManager.createQuery("from TenantJPA order by Layer", TenantJPA.class)
-//				.getResultList();
-//		if (!tenants.isEmpty()) {
-//			tenant = tenants.get(0);					
-//		}
-//		List<LanguageJPA> languages = entityManager.createQuery("from LanguageJPA", LanguageJPA.class).getResultList();
 
-		
-		
+		TenantJPA tenant = null;
+		List<TenantJPA> tenants = entityManager.createNamedQuery(GetTenantTop, TenantJPA.class).getResultList();
+		if (!tenants.isEmpty()) {
+			tenant = tenants.get(0);
+		}
+		user.setHomeTenant(tenant.getId());
+
 		entityManager.getTransaction().begin();
 		entityManager.persist(user);
 		entityManager.flush();

@@ -34,15 +34,11 @@ public class LogRecord implements Serializable {
 	private String msg;
 	private Throwable thrown = null;
 	private long millis;
-	private String sourceClassName;
-	private String sourceMethodName;
 
 	public LogRecord(Level level, String msg) {
 		this.level = level;
 		this.msg = msg;
 		millis = System.currentTimeMillis();
-		sourceClassName = "";
-		sourceMethodName = "";
 	}
 
 	protected LogRecord() {
@@ -103,11 +99,4 @@ public class LogRecord implements Serializable {
 	// public void setSourceClassName(String sourceClassName) {}
 	// public void setSourceMethodName(String sourceMethodName) {}
 	// public void setThreadID(int threadID) {}
-	public void setSourceClassName(String newSourceClassName) {
-		sourceClassName = newSourceClassName;
-	}
-	
-	public void setSourceMethodName(String newSourceMethodName) {
-		sourceMethodName = newSourceMethodName;
-	}
 }

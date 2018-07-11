@@ -13,18 +13,31 @@ import de.sonnmatt.muutos.Tools;
  * @author MuenSasc
  *
  */
-public class TranslationsDTO implements Serializable, IsSerializable {
+public class TextResourcesDTO implements Serializable, IsSerializable {
 
 	private static final long serialVersionUID = 7655582596499259001L;
 	private static final String DELIMITER = "__";
 	private HashMap<String, DoubleString> data;
 	private Set<String> missingData;
 	
-	public TranslationsDTO() {
+	public TextResourcesDTO() {
 		data = new HashMap<String,DoubleString>();
 		missingData = new HashSet<String>();
 	}
 	
+	public void put(String key, String value) {
+		DoubleString tString = new DoubleString(key, value);
+		data.put(key.toLowerCase(), tString);
+	}
+
+	public void putAll(TextResourcesDTO textResourcesDTO) {
+		data.putAll(textResourcesDTO.getAll());
+	}
+
+	private HashMap<String, DoubleString> getAll() {
+		return data;
+	}
+
 	public void set(String key, String value) {
 		DoubleString tString = new DoubleString(key, value);
 		data.put(key.toLowerCase(), tString);

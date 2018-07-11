@@ -3,6 +3,8 @@
  */
 package de.sonnmatt.muutos;
 
+import static de.sonnmatt.muutos.enums.TextSections.*;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,8 +12,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
-import de.sonnmatt.muutos.enums.TranslationSections;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.events.BusyEvent;
 import de.sonnmatt.muutos.events.BusyEvent.BusyEvents;
 import de.sonnmatt.muutos.rpc.LoginService;
@@ -34,12 +35,12 @@ public class AppController {
 	private HasWidgets container;
 	private String language;
 
-	public AppController(HandlerManager manager, String language) {
+	public AppController(HandlerManager manager, String tenant, String language) {
 		this.eventBus = manager;
 		this.language = language;
 
 		log.log(Level.FINER, "AppController started");
-		LoginService.Util.getInstance().getText(language, TranslationSections.AppBase ,new AsyncCallback<TranslationsDTO>() {
+		LoginService.Util.getInstance().getText(tenant, language, APP_BASE, new AsyncCallback<TextResourcesDTO>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -48,7 +49,7 @@ public class AppController {
 			}
 
 			@Override
-			public void onSuccess(TranslationsDTO result) {
+			public void onSuccess(TextResourcesDTO result) {
 				log.log(Level.FINER, "AppController getText succeded: " + result.size());
 				loginPage = new LoginPresenter(new LoginView(result), eventBus);
 				bindEvents();

@@ -7,10 +7,24 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
+
+@NamedQueries({@NamedQuery(name = LanguageJPA.GetLanAll, query = LanguageJPA.GetLanAll_Query),
+	@NamedQuery(name = LanguageJPA.GetLanByCode, query = LanguageJPA.GetLanByCode_Query) })
 
 @Entity
 @Table(name = "Muutos_Languages")
 public class LanguageJPA {
+	
+	public static final String GetLanAll = "LanguageJPA_GetAll";
+	public static final String GetLanByCode = "LanguageJPA_GetByCode";
+
+	public static final String ParamLanCode = "code";
+
+	public static final String GetLanAll_Query = "from LanguageJPA";
+	public static final String GetLanByCode_Query = "from LanguageJPA where Code = :" + ParamLanCode;
+
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")

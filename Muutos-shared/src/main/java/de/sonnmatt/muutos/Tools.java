@@ -18,7 +18,7 @@ public class Tools {
 		return Integer.valueOf(uniqueFieldID.substring(5));
 	}
 
-	public static String format(final String format, final Object... args) {
+	public final static String format(final String format, final Object... args) {
 		final RegExp regex = RegExp.compile("%[a-z]");
 		final SplitResult split = regex.split(format);
 		final StringBuffer msg = new StringBuffer();

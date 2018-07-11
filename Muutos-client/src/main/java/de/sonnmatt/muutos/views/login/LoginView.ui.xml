@@ -5,9 +5,8 @@
 	xmlns:b="urn:import:org.gwtbootstrap3.client.ui">
 
 	<ui:with field="myRen" type="de.sonnmatt.muutos.views.resources.LoginViewResources">
-		<ui:attributes data="de.sonnmatt.muutos.DTOs.TranslationsDTO" internal="transDTO" returnValue="String" namePrefix="login.view" />
+		<ui:attributes data="de.sonnmatt.muutos.DTOs.TextResourcesDTO" internal="textsDTO" returnValue="String" namePrefix="login.view" />
 	</ui:with>
-	<!--  sections="de.sonnmatt.muutos.enums.TranslationSections" section="login.view" -->
 	
 	<g:HTMLPanel>
 		<!-- TextBox to generate the translations -->
@@ -27,15 +26,15 @@
 							<b:Legend text="{myRen.loginTitle}" />
 							<b:FormGroup ui:field="groupLogin">
 								<b:FormLabel ui:field="loginLabel" for="formLogin" text="{myRen.loginLabel}" />
-								<b:TextBox ui:field="loginTextbox" b:id="formLogin" placeholder="{myRen.loginPlaceholder}" focus="true"
-									tabIndex="1" maxLength="50" />
+								<b:TextBox ui:field="loginTextbox" b:id="formLogin" placeholder="{myRen.loginPlaceholder}" 
+											focus="true" tabIndex="1" maxLength="50" />
 								<b:HelpBlock ui:field="loginHelp" text="{myRen.loginHelp}" />
 							</b:FormGroup>
 
 							<b:FormGroup ui:field="groupPassword">
 								<b:FormLabel ui:field="passwordLabel" for="formPassword" text="{myRen.passwordLabel}" />
-								<b:Input ui:field="passwordInput" type="PASSWORD" b:id="formPassword" placeholder="{myRen.passwordPlaceholder}"
-									tabIndex="2" maxLength="50" />
+								<b:Input ui:field="passwordInput" type="PASSWORD" b:id="formPassword" 
+											placeholder="{myRen.passwordPlaceholder}" tabIndex="2" maxLength="50" />
 								<b:HelpBlock ui:field="passwordHelp" text="{myRen.passwordHelp}" />
 							</b:FormGroup>
 

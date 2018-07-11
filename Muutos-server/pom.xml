@@ -37,14 +37,6 @@
 			<artifactId>validation-api</artifactId>
 			<version>1.1.0.Final</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.microsoft.sqlserver</groupId> -->
-<!-- 			<artifactId>sqljdbc4</artifactId> -->
-<!-- 			<version>3.0</version> -->
-<!-- 			<scope>system</scope> -->
-<!-- 			<systemPath>${project.basedir}/src/main/resources/lib/sqljdbc42.jar</systemPath> -->
-<!-- 			<optional>true</optional> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
@@ -62,18 +54,30 @@
 			<version>${hibernateVersion}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.hibernate</groupId> -->
+<!-- 			<artifactId>hibernate-validator</artifactId> -->
+<!-- 			<version>5.4.1.Final</version> -->
+<!-- 		</dependency> -->
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-envers -->
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>5.4.1.Final</version>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-envers</artifactId>
+		    <version>${hibernateVersion}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api -->
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.1-api</artifactId>
-			<version>1.0.0.Final</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.hibernate.javax.persistence</groupId> -->
+<!-- 			<artifactId>hibernate-jpa-2.1-api</artifactId> -->
+<!-- 			<version>1.0.0.Final</version> -->
+<!-- 		</dependency> -->
+		<!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
+<!-- 		<dependency> -->
+<!-- 		    <groupId>javax.persistence</groupId> -->
+<!-- 		    <artifactId>javax.persistence-api</artifactId> -->
+<!-- 		    <version>2.2</version> -->
+<!-- 		</dependency> -->
 
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		<dependency>
@@ -110,29 +114,9 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-<!-- 				<plugin> -->
-<!-- 					<groupId>org.eclipse.jetty</groupId> -->
-<!-- 					<artifactId>jetty-maven-plugin</artifactId> -->
-<!-- 					<configuration> -->
-<!-- 						<skip>false</skip> -->
-<!-- 						<scanIntervalSeconds>1</scanIntervalSeconds> -->
-<!-- 						<webApp> -->
-<!-- 							<extraClasspath>${basedir}/../Muutos-shared/target/classes/</extraClasspath> -->
-<!-- 						</webApp> -->
-<!-- 					</configuration> -->
-<!-- 				</plugin> -->
-<!-- 				<plugin> -->
-<!-- 					<groupId>org.apache.tomcat.maven</groupId> -->
-<!-- 					<artifactId>tomcat6-maven-plugin</artifactId> -->
-<!-- 					<configuration> -->
-<!-- 						<addWarDependenciesInClassloader>false</addWarDependenciesInClassloader> -->
-<!-- 						<path>/</path> -->
-<!-- 						<uriEncoding>UTF-8</uriEncoding> -->
-<!-- 					</configuration> -->
-<!-- 				</plugin> -->
 				<plugin>
 					<groupId>org.apache.tomcat.maven</groupId>
-					<artifactId>tomcat7-maven-plugin</artifactId>
+					<artifactId>tomcat8-maven-plugin</artifactId>
 					<configuration>
 						<addWarDependenciesInClassloader>false</addWarDependenciesInClassloader>
 						<path>/</path>
@@ -183,36 +167,9 @@
 			<build>
 				<pluginManagement>
 					<plugins>
-<!-- 						<plugin> -->
-<!-- 							<groupId>org.eclipse.jetty</groupId> -->
-<!-- 							<artifactId>jetty-maven-plugin</artifactId> -->
-<!-- 							<configuration> -->
-<!-- 								<webApp> -->
-<!-- 									<baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection"> -->
-<!-- 										<resourcesAsCSV>src/main/webapp,${basedir}/../target/gwt/launcherDir/</resourcesAsCSV> -->
-<!-- 									</baseResource> -->
-<!-- 								</webApp> -->
-<!-- 								<systemProperties> -->
-<!-- 									<systemProperty> -->
-<!-- 										<name>gwt.codeserver.port</name> -->
-<!-- 										<value>9876</value> -->
-<!-- 									</systemProperty> -->
-<!-- 								</systemProperties> -->
-<!-- 							</configuration> -->
-<!-- 						</plugin> -->
-<!-- 						<plugin> -->
-<!-- 							<groupId>org.apache.tomcat.maven</groupId> -->
-<!-- 							<artifactId>tomcat6-maven-plugin</artifactId> -->
-<!-- 							<configuration> -->
-<!-- 								<contextFile>${basedir}/src/main/tomcatconf/context.xml</contextFile> -->
-<!-- 								<systemProperties> -->
-<!-- 									<gwt.codeserver.port>9876</gwt.codeserver.port> -->
-<!-- 								</systemProperties> -->
-<!-- 							</configuration> -->
-<!-- 						</plugin> -->
 						<plugin>
 							<groupId>org.apache.tomcat.maven</groupId>
-							<artifactId>tomcat7-maven-plugin</artifactId>
+							<artifactId>tomcat8-maven-plugin</artifactId>
 							<configuration>
 								<contextFile>${basedir}/src/main/tomcatconf/context.xml</contextFile>
 								<systemProperties>

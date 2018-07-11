@@ -8,8 +8,10 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import de.sonnmatt.muutos.DTOs.DataDTO;
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.DTOs.ViewDTO;
+import de.sonnmatt.muutos.exceptions.GeneralException;
+import de.sonnmatt.muutos.exceptions.LoginException;
 
 /**
  * @author MuenSasc
@@ -30,9 +32,9 @@ public interface AppService extends RemoteService {
 		}
 	}
 	
-	public DataDTO getData(String sessionID);
+	public DataDTO getData(String sessionID) throws LoginException, GeneralException;
 	
-	public TranslationsDTO getText(String sessionID);
+	public TextResourcesDTO getText(String sessionID) throws LoginException;
 	
 	public ViewDTO getView(String sessionID);
 	

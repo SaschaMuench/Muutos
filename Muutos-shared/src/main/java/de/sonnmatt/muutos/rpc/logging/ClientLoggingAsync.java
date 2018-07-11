@@ -2,7 +2,7 @@ package de.sonnmatt.muutos.rpc.logging;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.DTOs.UserDTO;
 
 /**
@@ -15,7 +15,7 @@ public interface ClientLoggingAsync {
 	
 	void log(String logLevel, String sessionID, String message, AsyncCallback<String> asyncCallback);
 	
-	void getText(String lanCode, AsyncCallback<TranslationsDTO> asyncCallback);
+	void getText(String lanCode, AsyncCallback<TextResourcesDTO> asyncCallback);
 
 	void queryResetPassword(String username, AsyncCallback<Boolean> asyncCallback);
 

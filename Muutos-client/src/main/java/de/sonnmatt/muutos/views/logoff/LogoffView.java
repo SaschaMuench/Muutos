@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.interfaces.IPresenter;
 import de.sonnmatt.muutos.views.resources.LogoffViewResources;
 import de.sonnmatt.processor.GenerateTranslation;
@@ -36,7 +36,7 @@ public class LogoffView extends Composite implements ILogoffView  {
 	@UiField	Button		closeBtn;
 	@UiField	Label		footerLine;
 
-	public LogoffView(TranslationsDTO translation) {
+	public LogoffView(TextResourcesDTO translation) {
 		myRen = new LogoffViewResources(translation);
 		initWidget(uiBinder.createAndBindUi(this));
 	}
@@ -66,11 +66,11 @@ public class LogoffView extends Composite implements ILogoffView  {
 		this.presenter = (ILogoffPresenter) presenter;
 	}
 
-	public TranslationsDTO getTextValues() {
-		return myRen.getTranslationsDTO();
+	public TextResourcesDTO getTextValues() {
+		return myRen.getTextResourcesDTO();
 	}
 
-	public void setTextValues(TranslationsDTO transDTO) {
-		myRen.setTranslationsDTO(transDTO);
+	public void setTextValues(TextResourcesDTO textsDTO) {
+		myRen.setTextResourcesDTO(textsDTO);
 	}
 }

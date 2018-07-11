@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.interfaces.IPresenter;
 import de.sonnmatt.muutos.views.resources.LoginViewResources;
 import de.sonnmatt.processor.GenerateTranslation;
@@ -36,9 +36,10 @@ import de.sonnmatt.processor.GenerateTranslation;
 public class LoginView extends Composite implements ILoginView {
 
 	private Logger logger = Logger.getLogger("Muutos");
-	//	Bsp.:	logger.log(Level.SEVERE, "URL key: " + key);
-	
+	// Bsp.: logger.log(Level.SEVERE, "URL key: " + key);
+
 	private static LoginViewUiBinder uiBinder = GWT.create(LoginViewUiBinder.class);
+
 	interface LoginViewUiBinder extends UiBinder<HTMLPanel, LoginView> {
 	}
 
@@ -47,36 +48,47 @@ public class LoginView extends Composite implements ILoginView {
 	@UiField(provided = true)
 	final LoginViewResources myRen;
 
-	@UiField	Container	loginContainer;
-//	@UiField	Modal		loginModal;
-	@UiField	FormLabel	loginLabel;
-	@UiField	TextBox		loginTextbox;
-	@UiField	HelpBlock	loginHelp;
-	@UiField	FormLabel	passwordLabel;
-	@UiField	Input		passwordInput;
-	@UiField	HelpBlock	passwordHelp;
-	@UiField	Button		loginBtn;
-	@UiField	Anchor		forgetPassword;
-	@UiField	Label		footerLine;
-	@UiField	FormGroup	groupLogin;
-	@UiField	FormGroup	groupPassword;
+	@UiField
+	Container loginContainer;
+	// @UiField Modal loginModal;
+	@UiField
+	FormLabel loginLabel;
+	@UiField
+	TextBox loginTextbox;
+	@UiField
+	HelpBlock loginHelp;
+	@UiField
+	FormLabel passwordLabel;
+	@UiField
+	Input passwordInput;
+	@UiField
+	HelpBlock passwordHelp;
+	@UiField
+	Button loginBtn;
+	@UiField
+	Anchor forgetPassword;
+	@UiField
+	Label footerLine;
+	@UiField
+	FormGroup groupLogin;
+	@UiField
+	FormGroup groupPassword;
 
-	public LoginView(TranslationsDTO translation) {
-		myRen = new LoginViewResources(translation);
+	public LoginView(TextResourcesDTO texts) {
+		myRen = new LoginViewResources(texts);
 		initWidget(uiBinder.createAndBindUi(this));
 		passwordInput.setAutoComplete(true);
 	}
 
 	@Override
 	public void show() {
-//		loginModal.show();
 		loginTextbox.setFocus(true);
 	}
 
 	@Override
 	public void hide() {
-//		loginModal.hide();
-		//presenter.onHide();
+		// loginModal.hide();
+		// presenter.onHide();
 	}
 
 	@UiHandler("forgetPassword")
@@ -96,7 +108,7 @@ public class LoginView extends Composite implements ILoginView {
 	void handleTypedKeys(KeyUpEvent event) {
 		if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
 			presenter.onClickOk();
-	    }
+		}
 		if (event.getSource().equals(loginTextbox))
 			presenter.onTypeLogin(event);
 		else if (event.getSource().equals(passwordInput))
@@ -109,13 +121,13 @@ public class LoginView extends Composite implements ILoginView {
 	}
 
 	@Override
-	public TranslationsDTO getTextValues() {
-		return myRen.getTranslationsDTO();
+	public TextResourcesDTO getTextValues() {
+		return myRen.getTextResourcesDTO();
 	}
 
 	@Override
-	public void setTextValues(TranslationsDTO transDTO) {
-		myRen.setTranslationsDTO(transDTO);
+	public void setTextValues(TextResourcesDTO textsDTO) {
+		myRen.setTextResourcesDTO(textsDTO);
 	}
 
 	@Override

@@ -3,14 +3,14 @@ package de.sonnmatt.muutos.views.login;
 import org.gwtbootstrap3.client.ui.constants.ValidationState;
 import org.gwtbootstrap3.extras.notify.client.constants.NotifyType;
 
-import de.sonnmatt.muutos.DTOs.TranslationsDTO;
+import de.sonnmatt.muutos.DTOs.TextResourcesDTO;
 import de.sonnmatt.muutos.interfaces.IView;
 
 public interface ILoginView extends IView {
 
-	public TranslationsDTO getTextValues();
+	public TextResourcesDTO getTextValues();
 
-	public void setTextValues(TranslationsDTO transDTO);
+	public void setTextValues(TextResourcesDTO texts);
 
 	public String getLoginTextbox();
 

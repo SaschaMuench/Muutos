@@ -8,19 +8,24 @@
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<non-jta-data-source>java:comp/env/jdbc/MuutosDB</non-jta-data-source>
 
-		<class>de.sonnmatt.muutos.jpa.TranslationJPA</class>
+		<class>de.sonnmatt.muutos.jpa.TextJPA</class>
 		<class>de.sonnmatt.muutos.jpa.UserJPA</class>
 		<class>de.sonnmatt.muutos.jpa.GroupJPA</class>
 		<class>de.sonnmatt.muutos.jpa.TenantJPA</class>
 		<class>de.sonnmatt.muutos.jpa.CompanyJPA</class>
 		<class>de.sonnmatt.muutos.jpa.LanguageJPA</class>
+		<class>de.sonnmatt.muutos.jpa.SystemParamameterJPA</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
 			<property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="hibernate.jdbc.time_zone" value="UTC"/>
 			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.show_sql" value="false" />
+			<!-- Parameters for Envers -->
+			<property name="org.hibernate.envers.audit_table_suffix" value="_Log" />
+			<property name="org.hibernate.envers.store_data_at_delete" value="true" />
 		</properties>
 	</persistence-unit>
 

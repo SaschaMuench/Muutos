@@ -21,6 +21,7 @@ public class LoginException extends Exception implements Serializable, IsSeriali
 		userUnknown,
 		passwordWrong,
 		loginLocked,
+		tooManyUsers,
 		generalError
 	}
 	
