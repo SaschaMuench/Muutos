@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -87,6 +88,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 
 		UserService userService = new UserService();
 		HttpSession userSession = this.getThreadLocalRequest().getSession(true);
+
+		ThreadContext.put("user.sessionid", userSession.getId());
+		ThreadContext.put("user.login", username);
+		ThreadContext.put("user.userid", "");
+		ThreadContext.put("user.tenantid", (String) userSession.getAttribute(SESSATTR_TENANT_ID));
 		try {
 			String tenantId = (String)userSession.getAttribute(SESSATTR_TENANT_ID);
 			if (userService.setTenantID(tenantId).verifyUser(username, password)) {

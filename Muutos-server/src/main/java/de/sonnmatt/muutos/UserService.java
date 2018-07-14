@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
+
 import de.sonnmatt.muutos.exceptions.LoginException;
 import de.sonnmatt.muutos.exceptions.LoginException.LoginExceptionType;
 import de.sonnmatt.muutos.jpa.UserJPA;
@@ -19,9 +21,6 @@ public class UserService {
 	public boolean verifyUser(String username, String password) throws LoginException {
 		log.traceEntry("verifyUser({}, pwd)", username);
 
-		// ThreadContext.put("client.sessionid", session.getId());
-		// log.trace("verifyUser() client.sessionid set");
-
 		List<UserJPA> user = entityManager	.createNamedQuery(GetUserByLoginAndTenantId, UserJPA.class)
 											.setParameter(ParamUserLogin, username)
 											.setParameter(ParamUserTenantId, tenantID)
@@ -29,9 +28,10 @@ public class UserService {
 		log.trace("verifyUser() List<UserJPA> generated. Size: {}", user.size());
 
 		if (user.size() == 0) {
-			userLog.trace("Unknown user: {}", username);
+			userLog.trace("Unknown");
 			throw new LoginException(username, LoginExceptionType.userUnknown);
 		}
+		ThreadContext.put("user.userid", user.get(0).getid());
 		user.clear();
 		user = entityManager.createNamedQuery(GetUserByLoginAndTenantIdAndActive, UserJPA.class)
 							.setParameter(ParamUserLogin, username)
@@ -39,18 +39,20 @@ public class UserService {
 							.setParameter(ParamUserActive, true)
 							.getResultList();
 		if (user.size() == 0) {
-			userLog.trace("Login is locked: {}", username);
+			userLog.trace("Login is locked");
 			throw new LoginException(username, LoginExceptionType.loginLocked);
 		}
 		if (user.size() > 1) {
-			userLog.trace("Too many active users: {}", username);
+			ThreadContext.put("user.userid", "");
+			userLog.trace("Too many active users", username);
 			throw new LoginException(username, LoginExceptionType.tooManyUsers);
 		}
 		if (!user.get(0).checkPassword(password)) {
-			userLog.trace("Wrong password: {}", username);
+			userLog.trace("Wrong password");
+			//ToDo lock user if too many attempts
 			throw new LoginException("", LoginExceptionType.passwordWrong);
 		}
-		userLog.traceExit("User verified: {}", username);
+		userLog.trace("Login succeeded");
 		return true;
 	}
 

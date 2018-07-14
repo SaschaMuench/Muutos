@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -52,21 +53,15 @@ public class AppServiceImpl extends RemoteServiceServlet implements AppService, 
 		// TODO Auto-generated constructor stub
 	}
 
-	/* 
+	/*
 	 * ToDo: rename to ????
 	 */
 	@Override
 	public DataDTO getData(String sessionID) throws LoginException, GeneralException {
 		log.traceEntry("DataDTO getData(" + sessionID + ")");
 
-		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
-		HttpSession session = httpServletRequest.getSession(true);
-
-		String serverSessionID = session.getId();
-		if (!serverSessionID.equals(sessionID)) {
-			log.error("Session ID mismatch!! Server({}) vs payload({})" + serverSessionID, sessionID);
-			throw (new LoginException("Hacking detected", LoginExceptionType.generalError));
-		}
+		HttpSession session = checkSessionID(sessionID);
+	
 		String serverTenantID = (String) session.getAttribute(SESSATTR_TENANT_ID);
 		UserDTO userDTO = (UserDTO) session.getAttribute(SESSATTR_USER);
 		String lanCode = userDTO.get(UserFields.Language);
@@ -94,14 +89,7 @@ public class AppServiceImpl extends RemoteServiceServlet implements AppService, 
 	public TextResourcesDTO getText(String sessionID) throws LoginException {
 		log.traceEntry("TranslationsDTO getText(" + sessionID + ")");
 
-		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
-		HttpSession session = httpServletRequest.getSession(true);
-
-		String serverSessionID = session.getId();
-		if (!serverSessionID.equals(sessionID)) {
-			log.error("Session ID mismatch!! Server({}) vs payload({})" + serverSessionID, sessionID);
-			throw (new LoginException("Hacking detected", LoginExceptionType.generalError));
-		}
+		HttpSession session = checkSessionID(sessionID);
 
 		UserDTO userDTO = (UserDTO) session.getAttribute(SESSATTR_USER);
 		List<TextJPA> translations = entityManager	.createNamedQuery(GetTextByTenant_Lan_CodeLike, TextJPA.class)
@@ -112,6 +100,21 @@ public class AppServiceImpl extends RemoteServiceServlet implements AppService, 
 		translations.forEach(t -> transDTO.put(t.getCode(), t.getTranslation()));
 
 		return transDTO;
+	}
+
+	private HttpSession checkSessionID(String sessionID) throws LoginException {
+		HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
+		HttpSession session = httpServletRequest.getSession(true);
+
+		String serverSessionID = session.getId();
+		ThreadContext.put("user.sessionid", serverSessionID);
+		ThreadContext.put("user.login", (String) session.getAttribute(SESSATTR_LOGIN));
+		ThreadContext.put("user.userid", (String) session.getAttribute(SESSATTR_USER_ID));
+		if (!serverSessionID.equals(sessionID)) {
+			log.error("Session ID mismatch!! Server({}) vs payload({})" + serverSessionID, sessionID);
+			throw (new LoginException("Hacking detected", LoginExceptionType.generalError));
+		}
+		return session;
 	}
 
 	@Override

@@ -112,9 +112,11 @@ public class InitializeSetup {
 
 		log.trace("{}.translations(): tenant for tranlations: {}", classname, tenant.getCode());
 		entityManager.getTransaction().begin();
-		for (String transAction : TextSectionsExt.values()) {
+		for (String action : TextSectionsExt.values()) {
 			for (LanguageJPA lan : languages) {
-				String xPath = String.format("/Translations/Package[@name='%s' and @language='%s']", transAction,
+				// "/Translations/Package[translate(@name,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')='%s'
+				// and @language='%s']",
+				String xPath = String.format("/Translations/Package[@name='%s' and @language='%s']", action,
 						lan.getCode());
 				log.trace("{}.translations(): xPath: {}", classname, xPath);
 				HashMap<String, String> nodeData = new HashMap<>();
@@ -124,7 +126,7 @@ public class InitializeSetup {
 					for (Entry<String, String> pair : nodeData.entrySet()) {
 						log.trace("{}.translations(): generate: {}={}", classname, pair.getKey(), pair.getValue());
 						entityManager.persist(
-								new TextJPA(tenant, transAction + pair.getKey(), lan.getCode(), pair.getValue()));
+								new TextJPA(tenant, action + pair.getKey(), lan.getCode(), pair.getValue()));
 					}
 				} else {
 					log.trace("{}.translations(): nodes: null or 0", classname);

@@ -16,10 +16,16 @@ public final class TextSectionsExt extends TextSections implements Serializable,
 
 	public static List<String> values() {
 		List<String> values = new ArrayList<String>();
-		Field[] fields = TextSectionsExt.class.getDeclaredFields();
+		Field[] fields = TextSections.class.getDeclaredFields();
 		for (Field f : fields) {
 			if (Modifier.isStatic(f.getModifiers()) && String.class.equals(f.getType())) {
-				values.add(f.getName());
+				// values.add(f.getName());
+				try {
+					values.add((String) f.get(TextSections.class));
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return values;

@@ -51,7 +51,7 @@ public class UserJPA {
 
 	protected static final String GetUserByLoginQuery = "FROM UserJPA WHERE LoginName = :" + ParamUserLogin;
 	protected static final String GetUserByLoginAndTenantIdQuery = "FROM UserJPA WHERE LoginName = :" + ParamUserLogin
-			+ " AND HomeTenantId = :" + ParamUserTenantId;
+			+ " AND homeTenant = :" + ParamUserTenantId;
 	protected static final String GetByLoginAndTenantIdAndActiveQuery = GetUserByLoginAndTenantIdQuery
 			+ " AND Active = :" + ParamUserActive;
 
@@ -95,6 +95,7 @@ public class UserJPA {
 	// @JoinColumn(name = "HomeTenantId", nullable = false)
 	// @FilterJoinTable(name = FilterParamTenantId, condition = "id = :tenantId")
 	// private TenantJPA homeTenant;
+	@Column(name = "homeTenant", updatable = true, nullable = false, unique = false, length = 36)
 	private String homeTenant;
 
 	@OneToMany(cascade = CascadeType.ALL)
@@ -292,5 +293,9 @@ public class UserJPA {
 
 	public void setHomeTenant(String homeTenant) {
 		this.homeTenant = homeTenant;
+	}
+
+	public String getid() {
+		return uid;
 	}
 }

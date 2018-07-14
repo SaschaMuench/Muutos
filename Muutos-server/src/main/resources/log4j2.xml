@@ -24,14 +24,19 @@
 		</JDBC>
 		<JDBC name="DBUserLogin" tableName="Muutos_UserLogins">
 			<ConnectionFactory class="de.sonnmatt.muutos.ConnectionFactory" method="getDatabaseConnection" />
-			<Column name="SessionID" pattern="%.50X{sessionID}" />
-			<Column name="UserID" pattern="%.20X{userID}" />
-			<Column name="StampDate" isEventTimestamp="true" />
+			<Column name="EventDate" isEventTimestamp="true" />
+			<Column name="SessionID" pattern="%X{user.sessionid}" />
+			<Column name="TenantID" pattern="%X{user.tenantid}" />
+			<Column name="UserID" pattern="%X{user.userid}" />
+			<Column name="Login" pattern="%X{user.login}" />
 			<Column name="Message" pattern="%.1000message" />
 		</JDBC>
 		<!-- File Appender -->
 		<File name="File" fileName="c:/temp/muutos.log">
-			<PatternLayout pattern="%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} - %msg%n" />
+			<PatternLayout pattern="%d{yyyy-MMM-dd HH:mm:ss} %-5level %-36logger{36} - %msg%n" />
+		</File>
+		<File name="LoginFile" fileName="c:/temp/muutos_login.log">
+			<PatternLayout pattern="%d{yyyy-MMM-dd HH:mm:ss} [%-5level] %replace{%-15logger{1}}{ }{.} - %-32X{user.sessionid} - %X{user.userid} / %X{user.login} - %msg%n" />
 		</File>
 	</appenders>
 
@@ -44,18 +49,19 @@
 		<logger name="HibernateUtil.class">
 			<AppenderRef ref="File" />
 		</logger>
-		
-		<logger name="clientLog" additivity="false">
+
+		<logger name="clientLog" additivity="false" level="trace">
 			<AppenderRef ref="databaseClientLog" />
 		</logger>
 
-		<logger name="UserLogin" additivity="true" level="ALL">
+		<logger name="UserLogin" additivity="false" level="All">
 			<AppenderRef ref="DBUserLogin" />
+			<AppenderRef ref="LoginFile" />
 		</logger>
 
-		<Logger name="org.hibernate" level="error" />
-		<Logger name="org.hibernate.SQL" level="warn" />
-		<Logger name="org.hibernate.type.descriptor.sql" level="warn" />
-		<Logger name="org.hibernate.tool.hbm2ddl" level="warn" />
+		<logger name="org.hibernate" level="info" />
+		<Logger name="org.hibernate.SQL" level="info" />
+		<Logger name="org.hibernate.type.descriptor.sql" level="info" />
+		<Logger name="org.hibernate.tool.hbm2ddl" level="info" />
 	</Loggers>
 </Configuration>

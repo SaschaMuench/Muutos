@@ -12,6 +12,7 @@ public final class SessionAttributes {
 	public static final String SESSATTR_SESSION_ID = "SessionId";
 	public static final String SESSATTR_LOGIN = "Login";
 	public static final String SESSATTR_USER = "User";
+	public static final String SESSATTR_USER_ID = "UserId";
 
 	public static List<String> values() {
 		List<String> values = new ArrayList<String>();
